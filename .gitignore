@@ -1,0 +1,13 @@
+obj
+.vscode
+bin
+core
+BookStoreAPI.db
+*.suo*
+.dtbcache.v2
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
