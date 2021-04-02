@@ -20,7 +20,9 @@ namespace BookStoreAPI.Data
     public DbSet<Publisher> Publishers { get; set; }
     public DbSet<Review> Reviews { get; set; }
     public DbSet<ShoppingCart> ShoppingCarts { get; set; }
-
+    public DbSet<AuthorBook> AuthorBooks { get; set; }
+    public DbSet<BookCategory> BookCategories { get; set; }
+    public DbSet<Order_ReceiptBook> Order_ReceiptBooks { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -32,6 +34,7 @@ namespace BookStoreAPI.Data
       modelBuilder.Seed();
       modelBuilder.Entity<AuthorBook>().HasKey(ab => new { ab.AuthorId, ab.BookId });
       modelBuilder.Entity<BookCategory>().HasKey(bc => new { bc.BookId, bc.CategoryId });
+      modelBuilder.Entity<Order_ReceiptBook>().HasKey(ob => new { ob.BookId, ob.Order_ReceiptId });
     }
   }
 }

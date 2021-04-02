@@ -3,6 +3,8 @@ obj
 bin
 core
 BookStoreAPI.db
+BookStoreAPI.db-shm
+BookStoreAPI.db-wal
 *.suo*
 .dtbcache.v2
 .vscode/*

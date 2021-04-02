@@ -8,39 +8,41 @@ namespace BookStoreAPI.Models
         public int Id { get; set; }
         public string ISBN { get; set; }
         public string Title { get; set; }
-        public string Image { get; set; } = "http://serc.cl/wp-content/uploads/2018/02/book-cover-placeholder.jpg";
-        public string? Summary { get; set; }
-        // [DataType(DataType.DateTime)]
-        public DateTime PublicationDate { get; set; }
-        public int QuantityInStock { get; set; } = 50;
+        public string Image { get; set; }
+        public string Summary { get; set; }
+        public string PublicationDate { get; set; }
+        public int QuantityInStock { get; set; }
         public float Price { get; set; }
-        public static int Sold { get; set; } = 0;
-        public int Discount { get; set; } = 0;
+        public int Sold { get; set; }
+        public int Discount { get; set; }
 
 
-        public virtual ICollection<AuthorBook> AuthorBooks { get; set; }
+        public virtual List<AuthorBook> AuthorBooks { get; set; }
 
-        public int? PublisherId { get; set; }
+        public int PublisherId { get; set; }
         public virtual Publisher Publisher { get; set; }
 
-        public int? Order_ReceiptId { get; set; }
-        public virtual Order_Receipt Order_Receipt { get; set; }
+        public virtual List<Order_Receipt> Order_Receipts { get; set; }
 
-        public virtual ICollection<Review> Reviews { get; set; }
+        public virtual List<Review> Reviews { get; set; }
         
-        public virtual ICollection<BookCategory> BookCategories { get; set; }
+        public virtual List<BookCategory> BookCategories { get; set; }
     }
     public class BookCreateDto
     {
         public string ISBN { get; set; }
         public string Title { get; set; }
+        public string Image { get; set; }
+        public string Summary { get; set; }
+        public string PublicationDate { get; set; }
         public int QuantityInStock { get; set; }
         public float Price { get; set; }
-        public string Authors { get; set; }
-        public int PublisherId { get; set; }
         public int Sold { get; set; }
-        public string Categories { get; set; }
         public int Discount { get; set; }
+        public List<Author> Authors { get; set; }
+        public int PublisherId { get; set; }
+        public List<Order_Receipt> Order_Receipts { get; set; }
+        public List<Category> Categories { get; set; }
     }
 
     public class BookUpdateDto : BookCreateDto

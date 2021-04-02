@@ -31,5 +31,14 @@ namespace BookStoreAPI.Service
       fullName = FormatString.Trim_MultiSpaces_Title(fullName,true);
       return repository.FindAll().Where(c => c.FullName.Equals(fullName)).FirstOrDefault();
     }
+
+    public bool Exist(List<Author> authors){
+      foreach (var author in authors){
+        if(GetDetail(author.Id)==null){
+            return false;
+        }
+      }
+      return true;
+    }
   }
 }

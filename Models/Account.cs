@@ -9,18 +9,18 @@ namespace BookStoreAPI.Models
         public string FullName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public string? Phone { get; set; }
-        public string? HomeAddress { get; set; }
-        public string Image { get; set; } = "https://www.pngitem.com/pimgs/m/421-4213053_default-avatar-icon-hd-png-download.png";
-        public bool IsBlocked { get; set; } = false;
-        public AccountRole Role { get; set; } = AccountRole.Customer;
+        public string Phone { get; set; }
+        public string HomeAddress { get; set; }
+        public string Image { get; set; } 
+        public bool IsBlocked { get; set; }
+        public AccountRole Role { get; set; }
 
         public virtual CreditCard CreditCard { get; set; }
         public virtual ShoppingCart ShoppingCart { get; set; }
 
-        public virtual ICollection<Review> Reviews { get; set; }
+        public virtual List<Review> Reviews { get; set; }
         
-        public virtual ICollection<Order_Receipt> Order_Receipts { get; set; }
+        public virtual List<Order_Receipt> Order_Receipts { get; set; }
     
         public enum AccountRole{
             Customer, //Default
@@ -36,9 +36,13 @@ namespace BookStoreAPI.Models
         public string Password { get; set; }
         public string Phone { get; set; }
         public string HomeAddress { get; set; }
-        public int CreditCardId { get; set; }
+        public string Image { get; set; } 
         public bool IsBlocked { get; set; }
-        public string Role { get; set; }
+        public int Role { get; set; }
+
+        public List<Review> Reviews { get; set; }
+        
+        public List<Order_Receipt> Order_Receipts { get; set; }
     }
 
     public class AccountUpdateDto : AccountCreateDto

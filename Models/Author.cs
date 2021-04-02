@@ -6,10 +6,10 @@ namespace BookStoreAPI.Models
     {//1 author >=0 book
         public int Id { get; set; }
         public string FullName { get; set; }
-        public string? Biography { get; set; }
-        public string? Image { get; set; } = "https://www.pngitem.com/pimgs/m/421-4213053_default-avatar-icon-hd-png-download.png";
+        public string Biography { get; set; }
+        public string Image { get; set; }
         
-        public virtual ICollection<AuthorBook> AuthorBooks { get; set; }
+        public virtual List<AuthorBook> AuthorBooks { get; set; }
 
     }
     public class AuthorCreateDto
@@ -17,6 +17,8 @@ namespace BookStoreAPI.Models
         public string FullName { get; set; }
         public string Biography { get; set; }
         public string Image { get; set; }
+        
+        public virtual List<Book> Books { get; set; }
     }
 
     public class AuthorUpdateDto : AuthorCreateDto

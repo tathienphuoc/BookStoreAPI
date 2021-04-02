@@ -40,7 +40,6 @@ namespace BookStoreApi
             Configuration.GetConnectionString("DefaultConnection")));
 
             services
-            // .AddSingleton<DateTimeUtils>()
 
             .AddScoped<AccountRepository>()
             .AddScoped<AccountService>()
@@ -67,7 +66,13 @@ namespace BookStoreApi
             .AddScoped<ReviewService>()
 
             .AddScoped<ShoppingCartRepository>()
-            .AddScoped<ShoppingCartService>();
+            .AddScoped<ShoppingCartService>()
+            
+            .AddScoped<BookCategoryRepository>()
+            .AddScoped<BookCategoryService>()
+            
+            .AddScoped<AuthorBookRepository>()
+            .AddScoped<AuthorBookService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

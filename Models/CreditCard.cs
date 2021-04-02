@@ -12,9 +12,10 @@ namespace BookStoreAPI.Models
     }
     public class CreditCardCreateDto
     {
-        public int AccountId { get; set; }
         public string FullName { get; set; }
         public string SerialNumber { get; set; }
+        public int AccountId { get; set; }
+
     }
 
     public class CreditCardUpdateDto : CreditCardCreateDto
