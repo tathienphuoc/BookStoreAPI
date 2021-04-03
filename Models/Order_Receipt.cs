@@ -11,7 +11,7 @@ namespace BookStoreAPI.Models
         public float TotalPrice { get; set; }
 
         public int AccountId { get; set; }
-        public virtual Account Account { get; set; }
+        public virtual AppUser Account { get; set; }
 
         public virtual List<Book> Books { get; set; }
     }
