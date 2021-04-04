@@ -6,6 +6,8 @@ using BookStoreAPI.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System;
+
 namespace Controllers
 {
     [Route("api/[controller]")]
@@ -23,6 +25,64 @@ namespace Controllers
         {
             return service.GetAll();
         }
+        [HttpGet("{id}")]
+        public ActionResult<Author> GetAuthor(int id)
+        {
+            var Author = service.GetDetail(id);
+
+            if (Author == null)
+            {
+                return NotFound();
+            }
+
+            return Author;
+        }
+
+        [HttpPost]
+        public ActionResult<Author> Create(AuthorCreateDto AuthorCreateDto)
+        {
+            try
+            {
+                return service.Create(AuthorCreateDto);
+            }
+            catch (Exception error)
+            {
+                return Conflict(error.Message);
+            }
+        }
+
+        [HttpPut]
+        public ActionResult<Author> Update(AuthorUpdateDto AuthorUpdateDto)
+        {
+            try
+            {
+                return service.Update(AuthorUpdateDto);
+            }
+            catch (ArgumentException error)
+            {
+                return NotFound(error.Message);
+            }
+            catch (Exception error)
+            {
+                return Conflict(error.Message);
+            }
+        }
+
+
+
+        [HttpDelete("{id}")]
+        public ActionResult<Author> DeleteAuthor(int id)
+        {
+            try
+            {
+                return service.Delete(id);
+            }
+            catch (Exception error)
+            {
+                return Conflict(error.Message);
+            }
+        }
+
 
         // [HttpGet("{id}")]
         // public async Task<ActionResult<ProductDto>> GetProduct(int id)

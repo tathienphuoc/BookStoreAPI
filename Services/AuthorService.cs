@@ -32,7 +32,47 @@ namespace BookStoreAPI.Service
       return repository.FindAll().Where(c => c.FullName.Equals(fullName)).FirstOrDefault();
     }
 
-    public bool Exist(List<Author> authors){
+        public Author Create(AuthorCreateDto dto)
+        {
+           
+            var entity = new Author
+            {
+              FullName = dto.FullName,
+              Image = dto.Image,
+              Biography = dto.Biography
+
+            };
+
+            return repository.Add(entity);
+        }
+
+        public Author Update(AuthorUpdateDto dto)
+        {
+            // var isExist = GetDetail(dto.FullName);
+            // if (isExist != null && dto.Id != isExist.Id)
+            // {
+            //     throw new Exception(dto.FullName + " existed");
+            // }
+
+            var entity = new Author
+            {
+                Id = dto.Id,
+              FullName = FormatString.Trim_MultiSpaces_Title(dto.FullName, true),
+               Biography= dto.Biography,
+               Image = dto.Image
+            };
+            return repository.Update(entity);
+          
+        }
+
+        public Author Delete(int id)
+        {
+            var author = GetDetail(id);
+            return repository.Delete(id);
+        }
+
+
+        public bool Exist(List<Author> authors){
       foreach (var author in authors){
         if(GetDetail(author.Id)==null){
             return false;
