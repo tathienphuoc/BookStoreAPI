@@ -13,3 +13,4 @@ BookStoreAPI.db-wal
 !.vscode/launch.json
 !.vscode/extensions.json
 *.code-workspace
+.editorconfig

@@ -16,17 +16,17 @@ namespace BookStoreAPI.Service
       this.repository = AccountRepository;
     }
 
-    public List<Account> GetAll()
+    public List<AppUser> GetAll()
     {
       return repository.FindAll();
     }
 
-    public Account GetDetail(int id)
+    public AppUser GetDetail(int id)
     {
       return repository.FindById(id);
     }
 
-    public Account GetDetail(string email)
+    public AppUser GetDetail(string email)
     {
       email = FormatString.Trim_MultiSpaces_Title(email);
       return repository.FindAll().Where(c => c.Email.Equals(email)).FirstOrDefault();

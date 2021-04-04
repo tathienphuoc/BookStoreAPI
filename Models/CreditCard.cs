@@ -8,7 +8,7 @@ namespace BookStoreAPI.Models
         public string SerialNumber { get; set; }
         
         public int AccountId { get; set; }
-        public virtual Account Account { get; set; }
+        public virtual AppUser Account { get; set; }
     }
     public class CreditCardCreateDto
     {

@@ -1,90 +1,72 @@
-using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
+using BookStoreAPI.Interfaces;
 using BookStoreAPI.Models;
-using BookStoreAPI.Service;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-namespace Controllers
+
+namespace BookStoreAPI.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class AccountController : ControllerBase
     {
-        private readonly AccountService service;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly ITokenService _tokenService;
+        private readonly IMapper _mapper;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public AccountController(AccountService service)
+        public AccountController(UserManager<AppUser> userManager, 
+                ITokenService tokenService, IMapper mapper, SignInManager<AppUser> signInManager)
         {
-            this.service = service;
+            _userManager = userManager;
+            _tokenService = tokenService;
+            _mapper = mapper;
+            _signInManager = signInManager;
         }
 
-        public IEnumerable<Account> Get()
+        [HttpPost("{register}")]
+        public async Task<ActionResult<UserDto>> Register(AccountCreateDto register)
         {
-            return service.GetAll();
+            var user = await _userManager.FindByNameAsync(register.UserName);     
+            if(user != null) return BadRequest("Username is taken");
+
+            user = _mapper.Map<AppUser>(register);
+
+            var result = await _userManager.CreateAsync(user,register.Password);
+            if(!result.Succeeded) return BadRequest(result.Errors);
+            return new UserDto()
+            {
+                Username = user.UserName,
+                FullName = user.FullName,
+                Token = _tokenService.CreateToken(user),
+                HomeAddress = user.HomeAddress,
+                Image = user.Image,
+                PhoneNumber = user.PhoneNumber
+            };
         }
 
-        // [HttpGet("{id}")]
-        // public async Task<ActionResult<ProductDto>> GetProduct(int id)
-        // {
-        //     var product = await _context.Products.FindAsync(id);
+        [HttpPost("login")]
+        public async Task<ActionResult<UserDto>> Login(LoginDto login)
+        {
+            var user = await _userManager.Users
+                .SingleOrDefaultAsync(x => x.UserName == login.Username);
+            if (user == null) return Unauthorized("Invalid Username");
 
-        //     if (product == null)
-        //     {
-        //         return NotFound();
-        //     }
-
-        //     return product.ToDto();
-        // }
-
-        // [HttpPost]
-        // public async Task<ActionResult<ProductDto>> CreateProduct(ProductDto productDto)
-        // {
-        //     var product = productDto.ToModel();
-        //     _context.Products.Add(product);
-        //     await _context.SaveChangesAsync();
-
-        //     return CreatedAtAction(nameof(GetProduct), new { Id = product.Id }, product);
-        // }
-
-        // [HttpPut]
-        // public async Task<IActionResult> UpdateProduct(ProductDto productDto)
-        // {
-        //     var product = await _context.Products.FindAsync(productDto.Id);
-
-        //     if (product == null) return NotFound();
-
-        //     product.MapTo(productDto);
-
-        //     _context.Products.Update(product);
-
-        //     try
-        //     {
-        //         await _context.SaveChangesAsync();
-        //     }
-        //     catch (DbUpdateConcurrencyException) when (!ProductExists(product.Id))
-        //     {
-        //         return NotFound();
-        //     }
-
-        //     return NoContent();
-        // }
-
-        // [HttpDelete("{id}")]
-        // public async Task<IActionResult> DeleteProduct(int id)
-        // {
-        //     var product = await _context.Products.FindAsync(id);
-        //     if (product == null) return NotFound();
-
-        //     _context.Products.Remove(product);
-        //     await _context.SaveChangesAsync();
-
-        //     return NoContent();
-        // }
-
-        // private bool ProductExists(int id)
-        // {
-        //     return _context.Products.Any(p => p.Id == id);
-        // }
+            var result = await _signInManager.CheckPasswordSignInAsync(user, login.Password,false);
+            if(!result.Succeeded) return Unauthorized();
+            return new UserDto()
+            {
+                FullName = user.FullName,
+                Token = _tokenService.CreateToken(user),
+                HomeAddress = user.HomeAddress,
+                Image = user.Image,
+                PhoneNumber = user.PhoneNumber
+            };
+        }
     }
 }

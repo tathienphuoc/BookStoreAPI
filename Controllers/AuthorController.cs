@@ -5,9 +5,12 @@ using BookStoreAPI.Models;
 using BookStoreAPI.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+<<<<<<< HEAD
 using System.Collections.Generic;
 using System;
 
+=======
+>>>>>>> 328a96a53d8a946fed99d7347a3465872984c28f
 namespace Controllers
 {
     [Route("api/[controller]")]
