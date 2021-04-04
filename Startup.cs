@@ -46,6 +46,9 @@ namespace BookStoreApi
             services.AddIdentity<AppUser, AppRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddCors();
+
             services.Configure<IdentityOptions>(options =>
             {
                 // Thiết lập về Password
@@ -55,68 +58,76 @@ namespace BookStoreApi
                 options.Password.RequireUppercase = false; // Không bắt buộc chữ in
                 options.Password.RequiredLength = 3; // Số ký tự tối thiểu của password
             });
-                services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
+            services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
-                services
-                .AddScoped<ITokenService, TokenService>()
+            services
+            .AddScoped<ITokenService, TokenService>()
 
-                .AddScoped<AccountRepository>()
-                .AddScoped<AccountService>()
+            .AddScoped<AccountRepository>()
+            .AddScoped<AccountService>()
 
-                .AddScoped<AuthorRepository>()
-                .AddScoped<AuthorService>()
+            .AddScoped<AuthorRepository>()
+            .AddScoped<AuthorService>()
 
-                .AddScoped<BookRepository>()
-                .AddScoped<BookService>()
+            .AddScoped<BookRepository>()
+            .AddScoped<BookService>()
 
-                .AddScoped<CategoryRepository>()
-                .AddScoped<CategoryService>()
+            .AddScoped<CategoryRepository>()
+            .AddScoped<CategoryService>()
 
-                .AddScoped<CreditCardRepository>()
-                .AddScoped<CreditCardService>()
+            .AddScoped<CreditCardRepository>()
+            .AddScoped<CreditCardService>()
 
-                .AddScoped<Order_ReceiptRepository>()
-                .AddScoped<Order_ReceiptService>()
+            .AddScoped<Order_ReceiptRepository>()
+            .AddScoped<Order_ReceiptService>()
 
-                .AddScoped<PublisherRepository>()
-                .AddScoped<PublisherService>()
+            .AddScoped<PublisherRepository>()
+            .AddScoped<PublisherService>()
 
-                .AddScoped<ReviewRepository>()
-                .AddScoped<ReviewService>()
+            .AddScoped<ReviewRepository>()
+            .AddScoped<ReviewService>()
 
-                .AddScoped<ShoppingCartRepository>()
-                .AddScoped<ShoppingCartService>()
+            .AddScoped<ShoppingCartRepository>()
+            .AddScoped<ShoppingCartService>()
 
-                .AddScoped<BookCategoryRepository>()
-                .AddScoped<BookCategoryService>()
+            .AddScoped<BookCategoryRepository>()
+            .AddScoped<BookCategoryService>()
 
-                .AddScoped<AuthorBookRepository>()
-                .AddScoped<AuthorBookService>();
-            }
+            .AddScoped<AuthorBookRepository>()
+            .AddScoped<AuthorBookService>();
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-            public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
-                using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
-                {
-                    var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                    context.Database.Migrate();
-                }
-                if (env.IsDevelopment())
-                {
-                    app.UseDeveloperExceptionPage();
-                }
-
-                app.UseHttpsRedirection();
-                app.UseRouting();
-
-                app.UseAuthentication();   // Phục hồi thông tin đăng nhập (xác thực)
-                app.UseAuthorization();   // Phục hồi thông tinn về quyền của User
-
-                app.UseEndpoints(endpoints =>
-                {
-                    endpoints.MapControllers();
-                });
+                var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                context.Database.Migrate();
             }
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseHttpsRedirection();
+
+            app.UseRouting();
+
+            app.UseCors(x => x
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true) // allow any origin
+                .AllowCredentials()); // allow credentials
+
+            app.UseAuthentication();
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
+}
