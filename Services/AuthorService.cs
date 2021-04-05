@@ -34,7 +34,12 @@ namespace BookStoreAPI.Service
 
         public Author Create(AuthorCreateDto dto)
         {
-           
+            dto.FullName = FormatString.Trim_MultiSpaces_Title(dto.FullName, true);
+            var isExist = GetDetail(dto.FullName);
+            if (isExist != null)
+            {
+                throw new Exception(dto.FullName + " existed");
+            }
             var entity = new Author
             {
               FullName = dto.FullName,
@@ -48,11 +53,11 @@ namespace BookStoreAPI.Service
 
         public Author Update(AuthorUpdateDto dto)
         {
-            // var isExist = GetDetail(dto.FullName);
-            // if (isExist != null && dto.Id != isExist.Id)
-            // {
-            //     throw new Exception(dto.FullName + " existed");
-            // }
+            var isExist = GetDetail(dto.FullName);
+            if (isExist != null && dto.Id != isExist.Id)
+            {
+                throw new Exception(dto.FullName + " existed");
+            }
 
             var entity = new Author
             {
