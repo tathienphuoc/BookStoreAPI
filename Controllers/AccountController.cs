@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -5,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using BookStoreAPI.Interfaces;
 using BookStoreAPI.Models;
+using BookStoreAPI.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +17,7 @@ namespace BookStoreAPI.Controllers
     [Route("api/[controller]")]
     public class AccountController : ControllerBase
     {
+        private readonly AccountService service;
         private readonly UserManager<AppUser> _userManager;
         private readonly ITokenService _tokenService;
         private readonly IMapper _mapper;
@@ -68,5 +71,7 @@ namespace BookStoreAPI.Controllers
                 PhoneNumber = user.PhoneNumber
             };
         }
+
+       
     }
 }
