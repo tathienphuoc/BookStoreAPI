@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 namespace BookStoreAPI.Data
 {
-  public class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, int>
+  public class ApplicationDbContext : IdentityDbContext<Account, AppRole, int>
       // IdentityUserClaim<int>, AppUserRole, IdentityUserLogin<int>,
       // IdentityRoleClaim<int>, IdentityUserToken<int>>
   {

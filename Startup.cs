@@ -43,7 +43,7 @@ namespace BookStoreApi
             );
             services.AddDbContext<ApplicationDbContext>((options) => options.UseSqlite(
                 Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<AppUser, AppRole>()
+            services.AddIdentity<Account, AppRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 

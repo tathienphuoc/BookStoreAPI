@@ -18,13 +18,13 @@ namespace BookStoreAPI.Controllers
     public class AccountController : ControllerBase
     {
         private readonly AccountService service;
-        private readonly UserManager<AppUser> _userManager;
+        private readonly UserManager<Account> _userManager;
         private readonly ITokenService _tokenService;
         private readonly IMapper _mapper;
-        private readonly SignInManager<AppUser> _signInManager;
+        private readonly SignInManager<Account> _signInManager;
 
-        public AccountController(UserManager<AppUser> userManager, 
-                ITokenService tokenService, IMapper mapper, SignInManager<AppUser> signInManager)
+        public AccountController(UserManager<Account> userManager, 
+                ITokenService tokenService, IMapper mapper, SignInManager<Account> signInManager)
         {
             _userManager = userManager;
             _tokenService = tokenService;
@@ -38,7 +38,7 @@ namespace BookStoreAPI.Controllers
             var user = await _userManager.FindByNameAsync(register.UserName);     
             if(user != null) return BadRequest("Username is taken");
 
-            user = _mapper.Map<AppUser>(register);
+            user = _mapper.Map<Account>(register);
 
             var result = await _userManager.CreateAsync(user,register.Password);
             if(!result.Succeeded) return BadRequest(result.Errors);
