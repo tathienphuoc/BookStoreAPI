@@ -10,7 +10,7 @@ namespace BookStoreAPI.Repository
   public abstract class EfCoreRepository<TEntity, TContext> : IRepository<TEntity>
       where TContext : DbContext
       where TEntity : class, IEntity {
-    protected readonly TContext context;
+    public readonly TContext context;
     public EfCoreRepository(TContext context) {
       this.context = context;
     }

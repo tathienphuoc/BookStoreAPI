@@ -20,6 +20,9 @@ using Microsoft.AspNetCore.Identity;
 using BookStoreAPI.Interfaces;
 using BookStoreAPI.Services;
 using BookStoreAPI.Helpers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace BookStoreApi
 {
@@ -41,11 +44,21 @@ namespace BookStoreApi
                 .AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
+            });
             services.AddDbContext<ApplicationDbContext>((options) => options.UseSqlite(
                 Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<AppUser, AppRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+            services.AddIdentityCore<Account>(opt => {
+                opt.Password.RequireNonAlphanumeric = false;
+            })
+                .AddRoles<AppRole>()
+                .AddRoleManager<RoleManager<AppRole>>()
+                .AddSignInManager<SignInManager<Account>>()
+                .AddRoleValidator<RoleValidator<AppRole>>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddCors();
 
@@ -58,10 +71,21 @@ namespace BookStoreApi
                 options.Password.RequireUppercase = false; // Không bắt buộc chữ in
                 options.Password.RequiredLength = 3; // Số ký tự tối thiểu của password
             });
+
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(option =>
+                {
+                    option.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokenKey"])),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
 
             services
-            .AddScoped<ITokenService, TokenService>()
 
             .AddScoped<AccountRepository>()
             .AddScoped<AccountService>()
@@ -100,11 +124,11 @@ namespace BookStoreApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
-            {
-                var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                context.Database.Migrate();
-            }
+            // using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            // {
+            //     var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            //     context.Database.Migrate();
+            // }
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -114,14 +138,11 @@ namespace BookStoreApi
 
             app.UseRouting();
 
-            app.UseCors(x => x
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .SetIsOriginAllowed(origin => true) // allow any origin
-                .AllowCredentials()); // allow credentials
-
+            app.UseCors(x => x.AllowAnyHeader()
+                .AllowAnyMethod().WithOrigins("http://localhost:4200"));
+            
             app.UseAuthentication();
-
+            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

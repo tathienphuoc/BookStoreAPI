@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 namespace BookStoreAPI.Data
 {
-  public class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, int>
-      // IdentityUserClaim<int>, AppUserRole, IdentityUserLogin<int>,
-      // IdentityRoleClaim<int>, IdentityUserToken<int>>
+  public class ApplicationDbContext : IdentityDbContext<Account, AppRole, int>
   {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
@@ -43,6 +41,7 @@ namespace BookStoreAPI.Data
       modelBuilder.Seed();
       modelBuilder.Entity<AuthorBook>().HasKey(ab => new { ab.AuthorId, ab.BookId });
       modelBuilder.Entity<BookCategory>().HasKey(bc => new { bc.BookId, bc.CategoryId });
+      modelBuilder.Entity<Review>().HasKey(rv => new { rv.AccountId, rv.BookId });
       modelBuilder.Entity<Order_ReceiptBook>().HasKey(ob => new { ob.BookId, ob.Order_ReceiptId });
       foreach (var entityType in modelBuilder.Model.GetEntityTypes ()) {
                 var tableName = entityType.GetTableName ();

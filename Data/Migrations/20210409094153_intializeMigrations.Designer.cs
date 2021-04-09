@@ -3,14 +3,16 @@ using System;
 using BookStoreAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BookStoreApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210409094153_intializeMigrations")]
+    partial class intializeMigrations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -459,6 +461,10 @@ namespace BookStoreApi.Migrations
 
             modelBuilder.Entity("BookStoreAPI.Models.Review", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("AccountId")
                         .HasColumnType("INTEGER");
 
@@ -474,7 +480,9 @@ namespace BookStoreApi.Migrations
                     b.Property<bool>("Liked")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("AccountId", "BookId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
 
                     b.HasIndex("BookId");
 

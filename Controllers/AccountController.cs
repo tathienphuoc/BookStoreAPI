@@ -4,9 +4,11 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using BookStoreAPI.Helpers;
 using BookStoreAPI.Interfaces;
 using BookStoreAPI.Models;
 using BookStoreAPI.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,16 +17,16 @@ namespace BookStoreAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [AllowAnonymous]
     public class AccountController : ControllerBase
     {
-        private readonly AccountService service;
-        private readonly UserManager<AppUser> _userManager;
+        private readonly UserManager<Account> _userManager;
         private readonly ITokenService _tokenService;
         private readonly IMapper _mapper;
-        private readonly SignInManager<AppUser> _signInManager;
+        private readonly SignInManager<Account> _signInManager;
 
-        public AccountController(UserManager<AppUser> userManager, 
-                ITokenService tokenService, IMapper mapper, SignInManager<AppUser> signInManager)
+        public AccountController(UserManager<Account> userManager, 
+                ITokenService tokenService, IMapper mapper, SignInManager<Account> signInManager)
         {
             _userManager = userManager;
             _tokenService = tokenService;
@@ -38,7 +40,7 @@ namespace BookStoreAPI.Controllers
             var user = await _userManager.FindByNameAsync(register.UserName);     
             if(user != null) return BadRequest("Username is taken");
 
-            user = _mapper.Map<AppUser>(register);
+            user = _mapper.Map<Account>(register);
 
             var result = await _userManager.CreateAsync(user,register.Password);
             if(!result.Succeeded) return BadRequest(result.Errors);
@@ -47,7 +49,7 @@ namespace BookStoreAPI.Controllers
                 Username = user.UserName,
                 FullName = user.FullName,
                 Token = _tokenService.CreateToken(user),
-                HomeAddress = user.HomeAddress,
+                HomeAddress = user.HomeAddress, 
                 Image = user.Image,
                 PhoneNumber = user.PhoneNumber
             };
@@ -68,7 +70,8 @@ namespace BookStoreAPI.Controllers
                 Token = _tokenService.CreateToken(user),
                 HomeAddress = user.HomeAddress,
                 Image = user.Image,
-                PhoneNumber = user.PhoneNumber
+                PhoneNumber = user.PhoneNumber,
+                Username = user.UserName
             };
         }
 

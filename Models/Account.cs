@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 namespace BookStoreAPI.Models
 {//1 account co >=0 review, >=0 order_receipt, (0,1) card, 1 shoppingcart
-    public class AppUser: IdentityUser<int>, IEntity
+    public class Account: IdentityUser<int>, IEntity
     {
         public string FullName { get; set; }
         public string HomeAddress { get; set; }

@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace BookStoreApi.Data.Migrations
+namespace BookStoreApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210402120407_AddUserRoleIdentity")]
-    partial class AddUserRoleIdentity
+    [Migration("20210409094550_updateReview")]
+    partial class updateReview
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -33,34 +33,7 @@ namespace BookStoreApi.Data.Migrations
                     b.ToTable("BookOrder_Receipt");
                 });
 
-            modelBuilder.Entity("BookStoreAPI.Models.AppRole", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex");
-
-                    b.ToTable("Roles");
-                });
-
-            modelBuilder.Entity("BookStoreAPI.Models.AppUser", b =>
+            modelBuilder.Entity("BookStoreAPI.Models.Account", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -135,6 +108,33 @@ namespace BookStoreApi.Data.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("BookStoreAPI.Models.AppRole", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex");
+
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("BookStoreAPI.Models.Author", b =>
@@ -461,10 +461,6 @@ namespace BookStoreApi.Data.Migrations
 
             modelBuilder.Entity("BookStoreAPI.Models.Review", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("AccountId")
                         .HasColumnType("INTEGER");
 
@@ -474,15 +470,13 @@ namespace BookStoreApi.Data.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("Liked")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccountId");
+                    b.HasKey("AccountId", "BookId");
 
                     b.HasIndex("BookId");
 
@@ -676,7 +670,7 @@ namespace BookStoreApi.Data.Migrations
 
             modelBuilder.Entity("BookStoreAPI.Models.CreditCard", b =>
                 {
-                    b.HasOne("BookStoreAPI.Models.AppUser", "Account")
+                    b.HasOne("BookStoreAPI.Models.Account", "Account")
                         .WithOne("CreditCard")
                         .HasForeignKey("BookStoreAPI.Models.CreditCard", "AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -687,7 +681,7 @@ namespace BookStoreApi.Data.Migrations
 
             modelBuilder.Entity("BookStoreAPI.Models.Order_Receipt", b =>
                 {
-                    b.HasOne("BookStoreAPI.Models.AppUser", "Account")
+                    b.HasOne("BookStoreAPI.Models.Account", "Account")
                         .WithMany("Order_Receipts")
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -717,7 +711,7 @@ namespace BookStoreApi.Data.Migrations
 
             modelBuilder.Entity("BookStoreAPI.Models.Review", b =>
                 {
-                    b.HasOne("BookStoreAPI.Models.AppUser", "Account")
+                    b.HasOne("BookStoreAPI.Models.Account", "Account")
                         .WithMany("Reviews")
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -736,7 +730,7 @@ namespace BookStoreApi.Data.Migrations
 
             modelBuilder.Entity("BookStoreAPI.Models.ShoppingCart", b =>
                 {
-                    b.HasOne("BookStoreAPI.Models.AppUser", "Account")
+                    b.HasOne("BookStoreAPI.Models.Account", "Account")
                         .WithOne("ShoppingCart")
                         .HasForeignKey("BookStoreAPI.Models.ShoppingCart", "AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -756,7 +750,7 @@ namespace BookStoreApi.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("BookStoreAPI.Models.AppUser", null)
+                    b.HasOne("BookStoreAPI.Models.Account", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -765,7 +759,7 @@ namespace BookStoreApi.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("BookStoreAPI.Models.AppUser", null)
+                    b.HasOne("BookStoreAPI.Models.Account", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -780,7 +774,7 @@ namespace BookStoreApi.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BookStoreAPI.Models.AppUser", null)
+                    b.HasOne("BookStoreAPI.Models.Account", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -789,14 +783,14 @@ namespace BookStoreApi.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("BookStoreAPI.Models.AppUser", null)
+                    b.HasOne("BookStoreAPI.Models.Account", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("BookStoreAPI.Models.AppUser", b =>
+            modelBuilder.Entity("BookStoreAPI.Models.Account", b =>
                 {
                     b.Navigation("CreditCard");
 
