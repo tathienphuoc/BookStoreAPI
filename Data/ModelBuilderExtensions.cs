@@ -9,19 +9,22 @@ namespace BookStoreAPI.Data
         {
 
             modelBuilder.Entity<Author>().HasData(
-                new Author{
+                new Author
+                {
                     Id = 1,
                     FullName = "Author FullName 1",
                     Biography = "Author Biography 1",
                     Image = "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg"
                 },
-                new Author{
+                new Author
+                {
                     Id = 2,
                     FullName = "Author FullName 2",
                     Biography = "Author Biography 2",
                     Image = "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg"
                 },
-                new Author{
+                new Author
+                {
                     Id = 3,
                     FullName = "Author FullName 3",
                     Biography = "Author Biography 3",
@@ -30,12 +33,14 @@ namespace BookStoreAPI.Data
             );
 
             modelBuilder.Entity<Publisher>().HasData(
-                new Publisher{
+                new Publisher
+                {
                     Id = 1,
                     Name = "Publisher 1",
                     Image = "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg"
                 },
-                new Publisher{
+                new Publisher
+                {
                     Id = 2,
                     Name = "Publisher 2",
                     Image = "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg"
@@ -43,7 +48,8 @@ namespace BookStoreAPI.Data
             );
 
             modelBuilder.Entity<Book>().HasData(
-                new Book{
+                new Book
+                {
                     Id = 1,
                     ISBN = "Book ISBN 1",
                     Title = "Book title 1",
@@ -56,7 +62,8 @@ namespace BookStoreAPI.Data
                     Discount = 0,
                     PublisherId = 1
                 },
-                new Book{
+                new Book
+                {
                     Id = 2,
                     ISBN = "Book ISBN 2",
                     Title = "Book title 2",
@@ -72,53 +79,79 @@ namespace BookStoreAPI.Data
             );
 
             modelBuilder.Entity<Category>().HasData(
-                new Category{
+                new Category
+                {
                     Id = 1,
                     Name = "Category 1"
                 },
-                new Category{
+                new Category
+                {
                     Id = 2,
                     Name = "Category 2"
                 },
-                new Category{
+                new Category
+                {
                     Id = 3,
                     Name = "Category 3"
                 }
             );
 
             modelBuilder.Entity<BookCategory>().HasData(
-                new BookCategory{
+                new BookCategory
+                {
                     Id = 1,
-                    BookId=1,
-                    CategoryId=1
+                    BookId = 1,
+                    CategoryId = 1
                 },
-                new BookCategory{
+                new BookCategory
+                {
                     Id = 2,
-                    BookId=2,
-                    CategoryId=2
+                    BookId = 2,
+                    CategoryId = 2
                 },
-                new BookCategory{
+                new BookCategory
+                {
                     Id = 3,
-                    BookId=2,
-                    CategoryId=3
+                    BookId = 2,
+                    CategoryId = 3
                 }
             );
 
             modelBuilder.Entity<AuthorBook>().HasData(
-                new AuthorBook{
+                new AuthorBook
+                {
                     Id = 1,
-                    BookId=1,
-                    AuthorId=1
+                    BookId = 1,
+                    AuthorId = 1
                 },
-                new AuthorBook{
+                new AuthorBook
+                {
                     Id = 2,
-                    BookId=2,
-                    AuthorId=2
+                    BookId = 2,
+                    AuthorId = 2
                 },
-                new AuthorBook{
+                new AuthorBook
+                {
                     Id = 3,
-                    BookId=2,
-                    AuthorId=3
+                    BookId = 2,
+                    AuthorId = 3
+                }
+            );
+
+            modelBuilder.Entity<Account>().HasData(
+                new Account
+                {
+                    Id = 1,
+                    FullName = "SGU",
+                    HomeAddress = "SGU",
+                    Image = null,
+                    IsBlocked = true,
+                    CreditCard = null,
+                    ShoppingCart = null,
+
+                    Reviews = null,
+
+                    Order_Receipts = null
                 }
             );
 
