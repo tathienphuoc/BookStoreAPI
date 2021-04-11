@@ -5,6 +5,8 @@ using BookStoreAPI.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+
 namespace BookStoreAPI.Data
 {
   public class ApplicationDbContext : IdentityDbContext<Account, AppRole, int>

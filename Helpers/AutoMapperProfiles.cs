@@ -9,6 +9,8 @@ namespace BookStoreAPI.Helpers
         public AutoMapperProfiles()
         {
             CreateMap<AccountCreateDto, Account>();
+            CreateMap<Account, MemberDto>();
+            CreateMap<AccountUpdateDto, Account>();
             // CreateMap<Photo, PhotoDto>();
             // CreateMap<MemberUpdateDto, AppUser>();
             // CreateMap<RegisterDto, AppUser>();

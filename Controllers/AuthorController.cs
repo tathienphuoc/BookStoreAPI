@@ -5,8 +5,6 @@ using BookStoreAPI.Models;
 using BookStoreAPI.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
-using System.Collections.Generic;
 using System;
 using Microsoft.AspNetCore.Authorization;
 

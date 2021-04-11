@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using BookStoreAPI.Interface;
 namespace BookStoreAPI.Models
 {
@@ -6,7 +7,7 @@ namespace BookStoreAPI.Models
         public int Id { get; set; }
         public string FullName { get; set; }
         public string SerialNumber { get; set; }
-        
+        [ForeignKey("AccountId")]
         public int AccountId { get; set; }
         public virtual Account Account { get; set; }
     }

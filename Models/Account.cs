@@ -8,7 +8,7 @@ namespace BookStoreAPI.Models
     {
         public string FullName { get; set; }
         public string HomeAddress { get; set; }
-        public string Image { get; set; } 
+        public string Image { get; set; }
         public bool IsBlocked { get; set; }
         public virtual CreditCard CreditCard { get; set; }
         public virtual ShoppingCart ShoppingCart { get; set; }
@@ -29,8 +29,16 @@ namespace BookStoreAPI.Models
         public string FullName { get; set; }
         public string PhoneNumber { get; set; }
         public string HomeAddress { get; set; }
-        public string Image { get; set; }
+        public string Image { get; set; } 
         public string Token { get; set; }
+    }
+    public class MemberDto 
+    {
+        public string FullName { get; set; }
+        public string HomeAddress { get; set; }
+        public string Image { get; set; }
+        public bool IsBlocked { get; set; }
+        public string Email { get; set; }
     }
     public class LoginDto
     {
@@ -45,11 +53,13 @@ namespace BookStoreAPI.Models
         public string Password { get; set; }
         public string PhoneNumber { get; set; }
         public string HomeAddress { get; set; }
-        public string Image { get; set; }     
     }
 
-    public class AccountUpdateDto : AccountCreateDto
+    public class AccountUpdateDto
     {
-        public int Id { get; set; }
+        public string FullName { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
+        public string HomeAddress { get; set; }
     }
 }
