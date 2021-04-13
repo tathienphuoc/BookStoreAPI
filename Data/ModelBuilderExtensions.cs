@@ -1,6 +1,9 @@
 using BookStoreAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using BookStoreAPI.Utils;
+using System.Text.Json;
+using System.Collections.Generic;
+
 namespace BookStoreAPI.Data
 {
     public static class ModelBuilderExtensions
@@ -46,7 +49,7 @@ namespace BookStoreAPI.Data
                     Image = "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg"
                 }
             );
-
+            
             modelBuilder.Entity<Book>().HasData(
                 new Book
                 {

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BookStoreApi.Migrations
 {
-    public partial class intializeMigrations : Migration
+    public partial class InitializeDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -400,17 +400,15 @@ namespace BookStoreApi.Migrations
                 name: "Reviews",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    AccountId = table.Column<int>(type: "INTEGER", nullable: false),
+                    BookId = table.Column<int>(type: "INTEGER", nullable: false),
                     Content = table.Column<string>(type: "TEXT", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Liked = table.Column<bool>(type: "INTEGER", nullable: false),
-                    AccountId = table.Column<int>(type: "INTEGER", nullable: false),
-                    BookId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Liked = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Reviews", x => x.Id);
+                    table.PrimaryKey("PK_Reviews", x => new { x.AccountId, x.BookId });
                     table.ForeignKey(
                         name: "FK_Reviews_Books_BookId",
                         column: x => x.BookId,
@@ -464,6 +462,11 @@ namespace BookStoreApi.Migrations
                 table: "Publishers",
                 columns: new[] { "Id", "Image", "Name" },
                 values: new object[] { 2, "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg", "Publisher 2" });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FullName", "HomeAddress", "Image", "IsBlocked", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { 1, 0, "35e9bd89-61e1-4b04-9f23-b647c979727c", null, false, "SGU", "SGU", null, true, false, null, null, null, null, null, false, null, false, null });
 
             migrationBuilder.InsertData(
                 table: "Books",
@@ -544,11 +547,6 @@ namespace BookStoreApi.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Order_Receipts_AccountId",
                 table: "Order_Receipts",
-                column: "AccountId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Reviews_AccountId",
-                table: "Reviews",
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(

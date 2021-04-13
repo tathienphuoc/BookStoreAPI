@@ -112,7 +112,7 @@ namespace BookStoreApi.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "cb5915c3-05a8-4243-8531-85aeecd68e82",
+                            ConcurrencyStamp = "35e9bd89-61e1-4b04-9f23-b647c979727c",
                             EmailConfirmed = false,
                             FullName = "SGU",
                             HomeAddress = "SGU",

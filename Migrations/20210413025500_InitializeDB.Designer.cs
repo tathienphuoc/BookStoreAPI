@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookStoreApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210411083408_commnt")]
-    partial class commnt
+    [Migration("20210413025500_InitializeDB")]
+    partial class InitializeDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -114,7 +114,7 @@ namespace BookStoreApi.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "cb5915c3-05a8-4243-8531-85aeecd68e82",
+                            ConcurrencyStamp = "35e9bd89-61e1-4b04-9f23-b647c979727c",
                             EmailConfirmed = false,
                             FullName = "SGU",
                             HomeAddress = "SGU",
