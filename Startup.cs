@@ -111,6 +111,9 @@ namespace BookStoreApi
             .AddScoped<ReviewRepository>()
             .AddScoped<ReviewService>()
 
+            .AddScoped<Order_ReceiptBookRepository>()
+            .AddScoped<Order_ReceiptBookService>()
+
             .AddScoped<ShoppingCartRepository>()
             .AddScoped<ShoppingCartService>()
 
