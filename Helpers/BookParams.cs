@@ -2,6 +2,6 @@ namespace BookStoreAPI.Helpers
 {
     public class BookParams : PaginationParams
     {
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
     }
 }

@@ -37,7 +37,7 @@ namespace BookStoreAPI.Service
         public async Task<PagedList<Book>> GetBooksAsync(BookParams bookParams)
         { 
             var query = repository.context.Books.AsQueryable();
-            if (!String.IsNullOrEmpty(bookParams.CategoryId.ToString()))
+            if (bookParams.CategoryId != null)
             {
                 query = query.Where(b=>b.BookCategories
                     .Any(bc=>bc.CategoryId == bookParams.CategoryId)).AsQueryable();

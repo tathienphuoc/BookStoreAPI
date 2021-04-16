@@ -5,6 +5,7 @@ using BookStoreAPI.Utils;
 using System.Linq;
 using System;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookStoreAPI.Service
 {
@@ -19,6 +20,14 @@ namespace BookStoreAPI.Service
     public List<Author> GetAll()
     {
       return repository.FindAll();
+    }
+
+    public List<Author> GetAuthorByBook(int bookId)
+    {
+      var result = from author in repository.context.Authors
+           where author.AuthorBooks.Any(c=>c.AuthorId==bookId)
+           select author;
+      return result.ToList();
     }
 
     public Author GetDetail(int id)

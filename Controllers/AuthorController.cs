@@ -38,6 +38,14 @@ namespace Controllers
             return Author;
         }
 
+        [HttpGet("by-book/{bookId}")]
+        public IEnumerable<Author> GetAuthorByBook(int bookId)
+        {
+            var Author = service.GetAuthorByBook(bookId);
+
+            return Author;
+        }
+
         [HttpPost]
         public ActionResult<Author> Create(AuthorCreateDto AuthorCreateDto)
         {
