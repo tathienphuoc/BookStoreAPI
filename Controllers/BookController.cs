@@ -6,6 +6,8 @@ using BookStoreAPI.Models;
 using BookStoreAPI.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using BookStoreAPI.Helpers;
+
 namespace Controllers
 {
     [Route("api/[controller]")]
@@ -20,9 +22,13 @@ namespace Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Book> Get()
+        public async Task<ActionResult<IEnumerable<Book>>> Get([FromQuery] BookParams bookParams)
         {
-            return service.GetAll();
+            var result = await service.GetBooksAsync(bookParams);
+            Response.AddPaginationHeader(result.CurrentPage, result.PageSize,
+                result.TotalCount, result.TotalPages);
+
+            return Ok(result);
         }
 
         [HttpGet("{id}")]

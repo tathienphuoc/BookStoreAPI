@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using BookStoreAPI.Helpers;
 using BookStoreAPI.Models;
 using BookStoreAPI.Repository;
 using BookStoreAPI.Utils;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookStoreAPI.Service
 {
@@ -30,6 +33,19 @@ namespace BookStoreAPI.Service
         {
             return repository.FindAll();
         }
+
+        public async Task<PagedList<Book>> GetBooksAsync(BookParams bookParams)
+        { 
+            var query = repository.context.Books.AsQueryable();
+            if (!String.IsNullOrEmpty(bookParams.CategoryId.ToString()))
+            {
+                query = query.Where(b=>b.BookCategories
+                    .Any(bc=>bc.CategoryId == bookParams.CategoryId)).AsQueryable();
+            }
+            return await PagedList<Book>.CreateAsync(query,
+                    bookParams.pageNumber,bookParams.pageSize);
+            
+        } 
 
         public Book GetDetail(int id)
         {
