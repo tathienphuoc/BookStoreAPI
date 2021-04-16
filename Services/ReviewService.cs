@@ -38,6 +38,11 @@ namespace BookStoreAPI.Service
             return await repository.context.Reviews.FindAsync(userId, bookId);
         }
 
+        public async Task<List<Review>> GetAllReview() 
+        {
+            return await repository.context.Reviews.ToListAsync();
+        }
+
         public async Task<PagedList<Review>> GetUserReviews(ReviewParams reviewParams)
         {
             // var books = repository.context.Books.OrderBy(x=>x.Title).AsQueryable();

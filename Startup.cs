@@ -142,7 +142,9 @@ namespace BookStoreApi
             app.UseRouting();
 
             app.UseCors(x => x.AllowAnyHeader()
-                .AllowAnyMethod().WithOrigins("http://localhost:4200"));
+                .AllowAnyMethod()
+                .AllowCredentials()
+                .WithOrigins("http://localhost:4200"));
             
             app.UseAuthentication();
             

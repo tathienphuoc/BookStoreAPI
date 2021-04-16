@@ -12,7 +12,6 @@ namespace BookStoreAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-  [Authorize]
      public class ReviewController : ControllerBase
     {
         private readonly ReviewService _reviewService;
@@ -30,19 +29,19 @@ namespace BookStoreAPI.Controllers
         [HttpPost("add-review")]
         public async Task<IActionResult> AddReview(ReviewDto reviewDto)
         {  
-            var userId = User.GetUserId();
+            var accountId = reviewDto.AccountId;
             
             var book = _bookService.GetDetail(reviewDto.BookId); //Get User duoc Like
-            var user = await _reviewService.GetUserWithReviews(userId);  // Get minh ra tu bang like
+            var user = await _reviewService.GetUserWithReviews(accountId);  // Get minh ra tu bang like
 
-            if(book == null) return NotFound();
+            if(book == null) return NotFound(); 
 
-            var userReview = await _reviewService.GetUserReview(userId, reviewDto.BookId);
-            if(userReview != null) return BadRequest("Bạn đã thích Sách này");
+            var userReview = await _reviewService.GetUserReview(accountId, reviewDto.BookId);
+            if(userReview != null) return BadRequest("Bạn không thể thích sách này 2 lần !");
 
             userReview = new Review 
             {
-                AccountId = userId,
+                AccountId = accountId,
                 BookId = reviewDto.BookId,
                 CreatedAt = DateTime.Now,
                 Content = reviewDto.Content,
@@ -57,9 +56,16 @@ namespace BookStoreAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Review>>> GetUserLikes([FromQuery]ReviewParams reviewParams)
         {
-            reviewParams.UserId = User.GetUserId();
+            reviewParams.UserId = User.GetUserId(); 
             var result = await _reviewService.GetUserReviews(reviewParams);
             Response.AddPaginationHeader(result.CurrentPage, result.PageSize, result.TotalCount, result.TotalPages);
+            return Ok(result); 
+        }
+
+        [HttpGet("user-review")]
+        public async Task<ActionResult<IEnumerable<Review>>> GetUserReview()
+        {
+            var result = await _reviewService.GetAllReview();
             return Ok(result); 
         }
     }

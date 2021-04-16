@@ -42,6 +42,16 @@ namespace BookStoreAPI.Service
                 query = query.Where(b=>b.BookCategories
                     .Any(bc=>bc.CategoryId == bookParams.CategoryId)).AsQueryable();
             }
+            if (bookParams.AuthorId != null)
+            {
+                query = query.Where(b=>b.AuthorBooks
+                    .Any(bc=>bc.BookId == bookParams.AuthorId)).AsQueryable();
+            }
+            if (!String.IsNullOrEmpty(bookParams.TitleSearch))
+            {
+                query = query.Where(b=>b.Title.Contains(bookParams.TitleSearch))
+                        .AsQueryable();
+            }
             return await PagedList<Book>.CreateAsync(query,
                     bookParams.pageNumber,bookParams.pageSize);
             

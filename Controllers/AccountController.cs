@@ -46,6 +46,7 @@ namespace BookStoreAPI.Controllers
             if(!result.Succeeded) return BadRequest(result.Errors);
             return new UserDto()
             {
+                Id = user.Id,
                 Username = user.UserName,
                 FullName = user.FullName,
                 Token = _tokenService.CreateToken(user),
@@ -66,6 +67,7 @@ namespace BookStoreAPI.Controllers
             if(!result.Succeeded) return Unauthorized();
             return new UserDto()
             {
+                Id = user.Id,
                 FullName = user.FullName,
                 Token = _tokenService.CreateToken(user),
                 HomeAddress = user.HomeAddress,
