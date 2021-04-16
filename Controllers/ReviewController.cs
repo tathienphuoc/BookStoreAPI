@@ -12,7 +12,7 @@ namespace BookStoreAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-  
+  [Authorize]
      public class ReviewController : ControllerBase
     {
         private readonly ReviewService _reviewService;
