@@ -21,17 +21,17 @@ namespace BookStoreAPI.Service
       return book;
     }
     
-    public void Create(Book book, List<Category> categories){
+    public void Create(Book book, List<int> categories){
       foreach(var category in categories){
         var entity = new BookCategory{
           BookId=book.Id,
-          CategoryId = category.Id
+          CategoryId = category
         };
         repository.Add(entity);
       }
     }
 
-    public void Update(Book book, List<Category> categories){
+    public void Update(Book book, List<int> categories){
       DeleteAllByBook(book);
       Create(book,categories);
     }

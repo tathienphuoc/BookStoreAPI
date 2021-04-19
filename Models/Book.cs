@@ -39,10 +39,10 @@ namespace BookStoreAPI.Models
         public float Price { get; set; }
         public int Sold { get; set; }
         public int Discount { get; set; }
-        public List<Author> Authors { get; set; }
+        public List<int> AuthorId { get; set; }
         public int PublisherId { get; set; }
-        public List<Order_Receipt> Order_Receipts { get; set; }
-        public List<Category> Categories { get; set; }
+        public List<int> Order_ReceiptId { get; set; }
+        public List<int> CategoryId { get; set; }
     }
 
     public class BookUpdateDto : BookCreateDto

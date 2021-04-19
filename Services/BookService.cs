@@ -69,10 +69,11 @@ namespace BookStoreAPI.Service
         }
 
         public Book Create(BookCreateDto dto){
-            if(!categoryService.Exist(dto.Categories)){
+            if(!categoryService.Exist(dto.CategoryId)){
                 throw new ArgumentException("One/Some of categories not existed");
             }
-            if(!authorService.Exist(dto.Authors)){
+            if(!authorService.Exist(dto.AuthorId)){
+                
                 throw new ArgumentException("One/Some of authors not existed");
             }
             dto.Title = FormatString.Trim_MultiSpaces_Title(dto.Title,true);
@@ -98,8 +99,8 @@ namespace BookStoreAPI.Service
             };
 
             var book=repository.Add(entity);
-            bookCategoryService.Create(book,dto.Categories);
-            authorBookService.Create(book,dto.Authors);
+            bookCategoryService.Create(book,dto.CategoryId);
+            authorBookService.Create(book,dto.AuthorId);
             return book;
         }
 
@@ -109,10 +110,10 @@ namespace BookStoreAPI.Service
             {
                 throw new Exception(dto.ISBN + " existed");
             }
-            if(!categoryService.Exist(dto.Categories)){
+            if(!categoryService.Exist(dto.CategoryId)){
                 throw new ArgumentException("One/Some of categories not existed");
             }
-            if(!authorService.Exist(dto.Authors)){
+            if(!authorService.Exist(dto.AuthorId)){
                 throw new ArgumentException("One/Some of authors not existed");
             }
             dto.Title = FormatString.Trim_MultiSpaces_Title(dto.Title,true);
@@ -139,8 +140,8 @@ namespace BookStoreAPI.Service
             };
 
             var book=repository.Update(entity);
-            bookCategoryService.Update(book,dto.Categories);
-            authorBookService.Update(book,dto.Authors);
+            bookCategoryService.Update(book,dto.CategoryId);
+            authorBookService.Update(book,dto.AuthorId);
             return book;
         }
 

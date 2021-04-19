@@ -64,9 +64,9 @@ namespace BookStoreAPI.Service
       };
       return repository.Update(entity);
     }
-    public bool Exist(List<Category> categories){
+    public bool Exist(List<int> categories){
       foreach (var category in categories){
-        if(GetDetail(category.Id)==null){
+        if(GetDetail(category)==null){
             return false;
         }
       }

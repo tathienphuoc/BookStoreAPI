@@ -86,9 +86,9 @@ namespace BookStoreAPI.Service
         }
 
 
-        public bool Exist(List<Author> authors){
+        public bool Exist(List<int> authors){
       foreach (var author in authors){
-        if(GetDetail(author.Id)==null){
+        if(GetDetail(author)==null){
             return false;
         }
       }

@@ -20,16 +20,16 @@ namespace BookStoreAPI.Service
       return book;
     }
 
-    public void Create(Book book,List<Author> authors){
+    public void Create(Book book,List<int> authors){
             foreach(var author in authors){
         var entity = new AuthorBook{
           BookId=book.Id,
-          AuthorId = author.Id
+          AuthorId = author
         };
         repository.Add(entity);
       }
     }
-    public void Update(Book book, List<Author> authors){
+    public void Update(Book book, List<int> authors){
       DeleteAllByBook(book);
       Create(book,authors);
     }
