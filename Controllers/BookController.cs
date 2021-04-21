@@ -7,6 +7,7 @@ using BookStoreAPI.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BookStoreAPI.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Controllers
 {
@@ -20,7 +21,7 @@ namespace Controllers
         {
             this.service = service;
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Book>>> Get([FromQuery] BookParams bookParams)
         {
@@ -43,7 +44,7 @@ namespace Controllers
 
             return Book;
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult<Book> Create(BookCreateDto BookCreateDto)
         {

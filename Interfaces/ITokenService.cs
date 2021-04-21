@@ -1,9 +1,10 @@
+using System.Threading.Tasks;
 using BookStoreAPI.Models;
 
 namespace BookStoreAPI.Interfaces
 {
     public interface ITokenService
     {
-        string CreateToken(Account user);
+        Task<string> CreateTokenAsync(Account user);
     }
 }

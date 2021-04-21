@@ -12,11 +12,11 @@ namespace BookStoreAPI.Models
         public string Summary { get; set; }
         public string PublicationDate { get; set; }
         public int QuantityInStock { get; set; }
-        public float Price { get; set; }
+        public decimal Price { get; set; }
         public int Sold { get; set; }
         public int Discount { get; set; }
 
-
+        public virtual ShoppingCart ShoppingCart { get; set; }
         public virtual List<AuthorBook> AuthorBooks { get; set; }
 
         public int PublisherId { get; set; }
@@ -36,7 +36,7 @@ namespace BookStoreAPI.Models
         public string Summary { get; set; }
         public string PublicationDate { get; set; }
         public int QuantityInStock { get; set; }
-        public float Price { get; set; }
+        public decimal Price { get; set; }
         public int Sold { get; set; }
         public int Discount { get; set; }
         public List<int> AuthorId { get; set; }

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BookStoreAPI.Data;
+using BookStoreAPI.Models;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,7 +25,10 @@ namespace BookStoreApi
             {
                 var context = services.GetRequiredService<ApplicationDbContext>();
                 await context.Database.MigrateAsync();
+                var userManager = services.GetRequiredService<UserManager<Account>>();
+                var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
                 await BookSeed.SeedBooks(context);
+                await UserSeed.SeedUsers(userManager, roleManager);
             }
             catch (Exception ex)
             {

@@ -140,24 +140,6 @@ namespace BookStoreAPI.Data
                     AuthorId = 3
                 }
             );
-
-            modelBuilder.Entity<Account>().HasData(
-                new Account
-                {
-                    Id = 1,
-                    FullName = "SGU",
-                    HomeAddress = "SGU",
-                    Image = null,
-                    IsBlocked = true,
-                    CreditCard = null,
-                    ShoppingCart = null,
-
-                    Reviews = null,
-
-                    Order_Receipts = null
-                }
-            );
-
             return modelBuilder;
         }
     }

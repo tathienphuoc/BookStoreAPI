@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookStoreApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210413025500_InitializeDB")]
-    partial class InitializeDB
+    [Migration("20210421060000_CreateDb")]
+    partial class CreateDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -108,21 +108,6 @@ namespace BookStoreApi.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "35e9bd89-61e1-4b04-9f23-b647c979727c",
-                            EmailConfirmed = false,
-                            FullName = "SGU",
-                            HomeAddress = "SGU",
-                            IsBlocked = true,
-                            LockoutEnabled = false,
-                            PhoneNumberConfirmed = false,
-                            TwoFactorEnabled = false
-                        });
                 });
 
             modelBuilder.Entity("BookStoreAPI.Models.AppRole", b =>
@@ -248,8 +233,8 @@ namespace BookStoreApi.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("TEXT");
 
-                    b.Property<float>("Price")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("PublicationDate")
                         .HasColumnType("TEXT");
@@ -287,7 +272,7 @@ namespace BookStoreApi.Migrations
                             Discount = 0,
                             ISBN = "Book ISBN 1",
                             Image = "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg",
-                            Price = 0f,
+                            Price = 0m,
                             PublicationDate = "11:11 - 11/01/2021",
                             PublisherId = 1,
                             QuantityInStock = 0,
@@ -301,7 +286,7 @@ namespace BookStoreApi.Migrations
                             Discount = 0,
                             ISBN = "Book ISBN 2",
                             Image = "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg",
-                            Price = 0f,
+                            Price = 0m,
                             PublicationDate = "22:22 - 22/01/2021",
                             PublisherId = 1,
                             QuantityInStock = 0,
@@ -347,6 +332,36 @@ namespace BookStoreApi.Migrations
                             CategoryId = 3,
                             Id = 3
                         });
+                });
+
+            modelBuilder.Entity("BookStoreAPI.Models.CartItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ShoppingCartId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("ShoppingCartId");
+
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("BookStoreAPI.Models.Category", b =>
@@ -657,11 +672,13 @@ namespace BookStoreApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BookStoreAPI.Models.ShoppingCart", null)
-                        .WithMany("Books")
+                    b.HasOne("BookStoreAPI.Models.ShoppingCart", "ShoppingCart")
+                        .WithMany()
                         .HasForeignKey("ShoppingCartId");
 
                     b.Navigation("Publisher");
+
+                    b.Navigation("ShoppingCart");
                 });
 
             modelBuilder.Entity("BookStoreAPI.Models.BookCategory", b =>
@@ -681,6 +698,21 @@ namespace BookStoreApi.Migrations
                     b.Navigation("Book");
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("BookStoreAPI.Models.CartItem", b =>
+                {
+                    b.HasOne("BookStoreAPI.Models.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BookStoreAPI.Models.ShoppingCart", null)
+                        .WithMany("Items")
+                        .HasForeignKey("ShoppingCartId");
+
+                    b.Navigation("Book");
                 });
 
             modelBuilder.Entity("BookStoreAPI.Models.CreditCard", b =>
@@ -842,7 +874,7 @@ namespace BookStoreApi.Migrations
 
             modelBuilder.Entity("BookStoreAPI.Models.ShoppingCart", b =>
                 {
-                    b.Navigation("Books");
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

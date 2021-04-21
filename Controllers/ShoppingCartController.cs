@@ -40,12 +40,12 @@ namespace Controllers
         }
 
         [HttpPost]
-        public ActionResult<ShoppingCart> Create(ShoppingCartCreateDto ShoppingCartCreateDto)
+        public async Task<ActionResult<bool>> Create(ShoppingCartCreateDto ShoppingCartCreateDto)
         {
            
             try
             {
-                return service.Create(ShoppingCartCreateDto);
+                return await service.CreateAsync(ShoppingCartCreateDto);
             }
             catch (Exception error)
             {
@@ -53,18 +53,18 @@ namespace Controllers
             }
         }
 
-        [HttpPut]
-        public ActionResult<ShoppingCart> Update(ShoppingCartUpdateDto ShoppingCartUpdateDto)
-        {
-            try
-            {
-                return service.Update(ShoppingCartUpdateDto);
-            }
-            catch (Exception error)
-            {
-                return Conflict(error.Message);
-            }
-        }
+        // [HttpPut]
+        // public ActionResult<ShoppingCart> Update(ShoppingCartUpdateDto ShoppingCartUpdateDto)
+        // {
+        //     try
+        //     {
+        //         return service.Update(ShoppingCartUpdateDto);
+        //     }
+        //     catch (Exception error)
+        //     {
+        //         return Conflict(error.Message);
+        //     }
+        // }
 
         [HttpDelete("{id}")]
         public ActionResult<ShoppingCart> DeleteShoppingCart(int id)

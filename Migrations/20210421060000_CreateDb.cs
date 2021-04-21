@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BookStoreApi.Migrations
 {
-    public partial class InitializeDB : Migration
+    public partial class CreateDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -274,11 +274,11 @@ namespace BookStoreApi.Migrations
                     Summary = table.Column<string>(type: "TEXT", nullable: true),
                     PublicationDate = table.Column<string>(type: "TEXT", nullable: true),
                     QuantityInStock = table.Column<int>(type: "INTEGER", nullable: false),
-                    Price = table.Column<float>(type: "REAL", nullable: false),
+                    Price = table.Column<decimal>(type: "TEXT", nullable: false),
                     Sold = table.Column<int>(type: "INTEGER", nullable: false),
                     Discount = table.Column<int>(type: "INTEGER", nullable: false),
-                    PublisherId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ShoppingCartId = table.Column<int>(type: "INTEGER", nullable: true)
+                    ShoppingCartId = table.Column<int>(type: "INTEGER", nullable: true),
+                    PublisherId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -369,6 +369,35 @@ namespace BookStoreApi.Migrations
                         principalTable: "Order_Receipts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CartItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Quantity = table.Column<int>(type: "INTEGER", nullable: false),
+                    UnitPrice = table.Column<decimal>(type: "TEXT", nullable: false),
+                    TotalPrice = table.Column<decimal>(type: "TEXT", nullable: false),
+                    BookId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ShoppingCartId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CartItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CartItems_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CartItems_ShoppingCarts_ShoppingCartId",
+                        column: x => x.ShoppingCartId,
+                        principalTable: "ShoppingCarts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -464,19 +493,14 @@ namespace BookStoreApi.Migrations
                 values: new object[] { 2, "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg", "Publisher 2" });
 
             migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FullName", "HomeAddress", "Image", "IsBlocked", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1, 0, "35e9bd89-61e1-4b04-9f23-b647c979727c", null, false, "SGU", "SGU", null, true, false, null, null, null, null, null, false, null, false, null });
+                table: "Books",
+                columns: new[] { "Id", "Discount", "ISBN", "Image", "Price", "PublicationDate", "PublisherId", "QuantityInStock", "ShoppingCartId", "Sold", "Summary", "Title" },
+                values: new object[] { 1, 0, "Book ISBN 1", "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg", 0m, "11:11 - 11/01/2021", 1, 0, null, 0, "Summary title 1", "Book title 1" });
 
             migrationBuilder.InsertData(
                 table: "Books",
                 columns: new[] { "Id", "Discount", "ISBN", "Image", "Price", "PublicationDate", "PublisherId", "QuantityInStock", "ShoppingCartId", "Sold", "Summary", "Title" },
-                values: new object[] { 1, 0, "Book ISBN 1", "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg", 0f, "11:11 - 11/01/2021", 1, 0, null, 0, "Summary title 1", "Book title 1" });
-
-            migrationBuilder.InsertData(
-                table: "Books",
-                columns: new[] { "Id", "Discount", "ISBN", "Image", "Price", "PublicationDate", "PublisherId", "QuantityInStock", "ShoppingCartId", "Sold", "Summary", "Title" },
-                values: new object[] { 2, 0, "Book ISBN 2", "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg", 0f, "22:22 - 22/01/2021", 1, 0, null, 0, "Summary title 2", "Book title 2" });
+                values: new object[] { 2, 0, "Book ISBN 2", "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg", 0m, "22:22 - 22/01/2021", 1, 0, null, 0, "Summary title 2", "Book title 2" });
 
             migrationBuilder.InsertData(
                 table: "AuthorBooks",
@@ -531,6 +555,16 @@ namespace BookStoreApi.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Books_ShoppingCartId",
                 table: "Books",
+                column: "ShoppingCartId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartItems_BookId",
+                table: "CartItems",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartItems_ShoppingCartId",
+                table: "CartItems",
                 column: "ShoppingCartId");
 
             migrationBuilder.CreateIndex(
@@ -603,6 +637,9 @@ namespace BookStoreApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "BookOrder_Receipt");
+
+            migrationBuilder.DropTable(
+                name: "CartItems");
 
             migrationBuilder.DropTable(
                 name: "CreditCards");

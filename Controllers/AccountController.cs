@@ -44,12 +44,16 @@ namespace BookStoreAPI.Controllers
 
             var result = await _userManager.CreateAsync(user,register.Password);
             if(!result.Succeeded) return BadRequest(result.Errors);
+            
+            var roleResult = await _userManager.AddToRoleAsync(user, "Customer");
+            if (!roleResult.Succeeded) return BadRequest(result.Errors);
+            
             return new UserDto()
             {
                 Id = user.Id,
                 Username = user.UserName,
                 FullName = user.FullName,
-                Token = _tokenService.CreateToken(user),
+                Token = await _tokenService.CreateTokenAsync(user),
                 HomeAddress = user.HomeAddress, 
                 Image = user.Image,
                 PhoneNumber = user.PhoneNumber
@@ -69,11 +73,11 @@ namespace BookStoreAPI.Controllers
             {
                 Id = user.Id,
                 FullName = user.FullName,
-                Token = _tokenService.CreateToken(user),
+                Token = await _tokenService.CreateTokenAsync(user),
                 HomeAddress = user.HomeAddress,
                 Image = user.Image,
                 PhoneNumber = user.PhoneNumber,
-                Username = user.UserName
+                Username = user.UserName,
             };
         }
 
