@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using BookStoreAPI.Helpers;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
 
 namespace BookStoreAPI.Service
 {
@@ -40,7 +42,7 @@ namespace BookStoreAPI.Service
         }
 
         public async Task<bool> CreateAsync(ShoppingCartCreateDto dto)
-        {            
+        {
             var book = repository.context.Books.Find(dto.BookId);
             var cart = await GetExistingOrCreateNewCart(dto.AccountId);
             cart.AddItem(book.Id, unitPrice:book.Price);
@@ -49,14 +51,39 @@ namespace BookStoreAPI.Service
             return result;
         }
 
+        // public async Task<bool> UpdateAsync(ShoppingCartUpdateDto dto)
+        // {
+        //     var book = repository.context.Books.Find(dto.BookId);
+        //     var cart = await UpdateCart(dto.AccountId, book);
+        //     cart.UpdateItem(book.Id, quantity: book.QuantityInStock);
+        //     repository.context.ShoppingCarts.Update(cart);
+        //     var result = await repository.context.SaveChangesAsync() > 0;
+        //     return result;
+        // }
+
+        public ShoppingCart RemoveItem(int cartId,int cartItemId){
+            var cart = repository.FindById(cartId);
+            cart.RemoveItem(cartItemId);
+            repository.context.SaveChanges();
+            return cart;
+        }
+
+        public ShoppingCart ChangeQuantity(ShoppingCartUpdateDto dto){
+            var cart = repository.FindById(dto.cartId);
+            cart.UpdateItem(dto.cartItemId, dto.quantity);
+            repository.context.SaveChanges();
+            return cart;
+
+        }
+
         private async Task<ShoppingCart> GetExistingOrCreateNewCart(int accountId)
         {
             var user = await _userManager.FindByIdAsync(accountId.ToString());
 
             var cart = repository.FindAll()
-                    .Where(x=>x.Account == user)
+                    .Where(x => x.Account == user)
                     .FirstOrDefault();
-            if (cart!= null)
+            if (cart != null)
             {
                 return cart;
             }
@@ -67,6 +94,68 @@ namespace BookStoreAPI.Service
             repository.Add(newCart);
             return newCart;
         }
+
+
+        private async Task<ShoppingCart> UpdateCart(int accountId, Book book)
+        {
+            var user = await _userManager.FindByIdAsync(accountId.ToString());
+
+            var cart = repository.FindAll()
+                    .Where(x => x.Account == user)
+                    .FirstOrDefault();
+            if (cart != null)
+            {
+                return cart;
+            }
+            var newCart = new ShoppingCart
+            {
+                Account = user
+            };
+            repository.Update(newCart);
+            return newCart;
+        }
+
+
+
+
+
+
+
+        // private async Task<ShoppingCart> Update(ShoppingCartUpdateDto dto,  int quantity)
+        // {
+
+        // }
+
+        // public async Task<ShoppingCart> Update( int accountId, Book book)
+        // {
+        //     // var cart = await Repository.GetByIdAsync<ShoppingCart>(id);
+        //     var user = await _userManager.FindByIdAsync(accountId.ToString());
+
+
+        //     var cart = repository.FindAll()
+        //         .Where(x => x.Account == user)
+        //         .FirstOrDefault();
+
+
+        //     if (cart == null)
+        //         return null;
+
+        //     var newCart = new ShoppingCart
+        //     {
+        //         Account = user,
+        //         Id = cartItem.Id,
+        //         Quantity = cartItem.Quantity
+
+        // };
+        //     repository.Update(newCart);
+
+        //     _iRepository.Update<BasketItem>(basketItem);
+        //     await _iRepository.SaveAsync();
+        //     return await GetBasketItemsAsync(basketItem.UserId);
+        // }
+
+
+
 
         // public ShoppingCart Update(ShoppingCartUpdateDto dto)
         // {
@@ -81,29 +170,10 @@ namespace BookStoreAPI.Service
         //         Id = dto.Id,
         //         AccountId = dto.AccountId,
         //         LastUpdated = dto.LastUpdated,
-        //         Books = dto.Books
+        //       Books = books
 
         //     };
         //     return repository.Update(entity);
         // }
-
-        public ShoppingCart RemoveItem(int cartId, int cartItemId)
-        {
-            var cart = (repository.FindById(cartId));
-            cart.RemoveItem(cartItemId);
-            repository.context.SaveChanges();
-            return cart;
-        }
-
-
-
-
-
-
-
-
-
-
-
     }
 }

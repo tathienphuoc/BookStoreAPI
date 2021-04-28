@@ -66,6 +66,21 @@ namespace Controllers
         //     }
         // }
 
+        [HttpPut]
+        public ActionResult<ShoppingCart> Update([FromBody]ShoppingCartUpdateDto ShoppingCartUpdateDto)
+        {
+
+            try
+            {
+                return service.ChangeQuantity(ShoppingCartUpdateDto);
+            }
+            catch (Exception error)
+            {
+                return Conflict(error.Message);
+            }
+        }
+
+
         [HttpDelete("{cartId}/{cartItemId}")]
         public ActionResult<ShoppingCart> DeleteShoppingCart(int cartId, int cartItemId)
         {

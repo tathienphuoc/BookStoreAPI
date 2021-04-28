@@ -24,6 +24,7 @@ namespace Controllers
         {
             this.service = service;
         }
+        // [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Book>>> Get([FromQuery] BookParams bookParams)
         {
