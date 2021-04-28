@@ -26,10 +26,10 @@ namespace Controllers
         {
             return service.GetAll();
         }
-        [HttpGet("{id}")]
-        public ActionResult<ShoppingCart> GetShoppingCart(int id)
+        [HttpGet("{accountId}")]
+        public ActionResult<ShoppingCart> GetShoppingCart(int accountId)
         {
-            var ShoppingCart = service.GetDetail(id);
+            var ShoppingCart = service.GetCartByAccount(accountId);
 
             if (ShoppingCart== null)
             {
@@ -66,12 +66,27 @@ namespace Controllers
         //     }
         // }
 
-        [HttpDelete("{id}")]
-        public ActionResult<ShoppingCart> DeleteShoppingCart(int id)
+        [HttpPut]
+        public ActionResult<ShoppingCart> Update([FromBody]ShoppingCartUpdateDto ShoppingCartUpdateDto)
+        {
+
+            try
+            {
+                return service.ChangeQuantity(ShoppingCartUpdateDto);
+            }
+            catch (Exception error)
+            {
+                return Conflict(error.Message);
+            }
+        }
+
+
+        [HttpDelete("{cartId}/{cartItemId}")]
+        public ActionResult<ShoppingCart> DeleteShoppingCart(int cartId, int cartItemId)
         {
             try
             {
-                return service.Delete(id);
+                return service.RemoveItem(cartId, cartItemId);
             }
             catch (Exception error)
             {
