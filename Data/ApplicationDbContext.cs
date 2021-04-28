@@ -43,10 +43,21 @@ namespace BookStoreAPI.Data
       modelBuilder.Entity<IdentityUserToken<int>>().ToTable("UserTokens").HasKey(x=>x.UserId);
       modelBuilder.Seed();
       modelBuilder.Entity<AuthorBook>().HasKey(ab => new { ab.AuthorId, ab.BookId });
+      modelBuilder.Entity<AuthorBook>().HasOne(ab => ab.Book)
+                  .WithMany(b => b.AuthorBooks)
+                  .OnDelete(DeleteBehavior.Cascade);
       modelBuilder.Entity<BookCategory>().HasKey(bc => new { bc.BookId, bc.CategoryId });
+      modelBuilder.Entity<BookCategory>().HasOne(bc => bc.Book)
+                  .WithMany(b => b.BookCategories)
+                  .OnDelete(DeleteBehavior.Cascade);
       modelBuilder.Entity<Review>().HasKey(rv => new { rv.AccountId, rv.BookId });
+      modelBuilder.Entity<Review>().HasOne(rv => rv.Book)
+                  .WithMany(b => b.Reviews)
+                  .OnDelete(DeleteBehavior.Cascade);
       modelBuilder.Entity<Order_ReceiptBook>().HasKey(ob => new { ob.BookId, ob.Order_ReceiptId });
-
+      // modelBuilder.Entity<Order_ReceiptBook>().HasOne(or => or.Book)
+      //             .WithMany(b => b.Order_Receipts)
+      //             .OnDelete(DeleteBehavior.Cascade);
       foreach (var entityType in modelBuilder.Model.GetEntityTypes ()) {
                 var tableName = entityType.GetTableName ();
                 if (tableName.StartsWith ("AspNet")) {

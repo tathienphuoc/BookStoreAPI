@@ -6,6 +6,7 @@ using BookStoreAPI.Helpers;
 using BookStoreAPI.Models;
 using BookStoreAPI.Repository;
 using BookStoreAPI.Utils;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,11 +16,15 @@ namespace BookStoreAPI.Service
     {
         private BookRepository repository;
         private PublisherService publisherService;
+        private readonly IWebHostEnvironment _webHost;
         private CategoryService categoryService;
         private AuthorService authorService;
         private BookCategoryService bookCategoryService;
         private AuthorBookService authorBookService;
-        public BookService(BookRepository BookRepository,CategoryService CategoryService,AuthorService AuthorService,BookCategoryService BookCategoryService, AuthorBookService AuthorBookService,PublisherService PublisherService)
+        public BookService(BookRepository BookRepository,CategoryService CategoryService,
+        AuthorService AuthorService,BookCategoryService BookCategoryService, 
+        AuthorBookService AuthorBookService,PublisherService PublisherService,
+        IWebHostEnvironment webHost)
         {
             this.repository = BookRepository;
             this.categoryService = CategoryService;
@@ -27,6 +32,7 @@ namespace BookStoreAPI.Service
             this.bookCategoryService= BookCategoryService;
             this.authorBookService= AuthorBookService;
             this.publisherService=PublisherService;
+            _webHost = webHost;
         }
 
         public List<Book> GetAll()
@@ -84,11 +90,14 @@ namespace BookStoreAPI.Service
             if (publisherService.GetDetail(dto.PublisherId) == null){
                 throw new ArgumentException("Publisher not existed");
             }
-
+            var saveImage = new FileService(_webHost);
+            var path = saveImage.Save(dto.Image);
+    
             var entity = new Book{
                 ISBN = FormatString.Trim_MultiSpaces_Title(dto.ISBN),
                 Title = dto.Title,
-                Image = FormatString.Trim_MultiSpaces_Title(dto.Image),
+                Image = path,
+                // Image = FormatString.Trim_MultiSpaces_Title(dto.Image),
                 Summary = dto.Summary,
                 PublicationDate = dto.PublicationDate,
                 QuantityInStock = dto.QuantityInStock,
@@ -129,7 +138,7 @@ namespace BookStoreAPI.Service
                 Id = dto.Id,
                 ISBN = FormatString.Trim_MultiSpaces_Title(dto.ISBN),
                 Title = dto.Title,
-                Image = FormatString.Trim_MultiSpaces_Title(dto.Image),
+                // Image = FormatString.Trim_MultiSpaces_Title(dto.Image),
                 Summary = dto.Summary,
                 PublicationDate = dto.PublicationDate,
                 QuantityInStock = dto.QuantityInStock,
@@ -147,13 +156,8 @@ namespace BookStoreAPI.Service
 
         public Book Delete(int id){
             var book = GetDetail(id);
-            if (book.AuthorBooks!=null||
-                book.Order_Receipts!=null||
-                book.Reviews!=null||
-                book.BookCategories!=null
-            )
+            if (book == null)
                 throw new Exception("Book has been used!");
-                
             return repository.Delete(id);
         }
     }

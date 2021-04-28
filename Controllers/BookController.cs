@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BookStoreAPI.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using BookStoreAPI.Services;
+using BookStoreAPI.Interfaces;
 
 namespace Controllers
 {
@@ -21,7 +24,6 @@ namespace Controllers
         {
             this.service = service;
         }
-        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Book>>> Get([FromQuery] BookParams bookParams)
         {
@@ -44,9 +46,8 @@ namespace Controllers
 
             return Book;
         }
-        [Authorize(Roles = "Admin")]
         [HttpPost]
-        public ActionResult<Book> Create(BookCreateDto BookCreateDto)
+        public ActionResult<Book> Create([FromForm]BookCreateDto BookCreateDto)
         {
             try
             {
@@ -60,7 +61,8 @@ namespace Controllers
                 return Conflict(error.Message); 
             }
         }
-
+        
+        [Authorize(Roles = "Admin")]
         [HttpPut]
         public ActionResult<Book> Update(BookUpdateDto BookUpdateDto)
         {
@@ -76,7 +78,6 @@ namespace Controllers
                 return Conflict(error.Message); 
             }
         }
-
         [HttpDelete("{id}")]
         public ActionResult<Book> DeleteBook(int id){
             try{

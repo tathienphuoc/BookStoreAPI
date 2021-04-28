@@ -3,11 +3,11 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using System;
 
-namespace Cinemo.Service
+namespace BookStoreAPI.Service
 {
   public class FileService
   {
-    private string STORE_PATH = "wwwroot/uploads";
+    public string STORE_PATH = "wwwroot/uploads";
     public string PUBLIC_PATH = "/uploads";
     private IWebHostEnvironment _environment;
     public FileService(IWebHostEnvironment environment)
@@ -25,12 +25,13 @@ namespace Cinemo.Service
         var fileName = Guid.NewGuid().ToString() + ext;
 
         var file = Path.Combine(STORE_PATH, fileName);
-        using (var fileStream = new FileStream(file, FileMode.Create))
-        {
-          Upload.CopyTo(fileStream);
+        
+        using (Stream fileStream = new FileStream(file, FileMode.Create)) {
+            Upload.CopyTo(fileStream);
         }
+        
         Console.WriteLine("File uploaded");
-        return fileName;
+        return file.Replace("wwwroot/uploads", "/uploads");
       } catch(Exception error){
         Console.WriteLine(error.Message);
         return null;

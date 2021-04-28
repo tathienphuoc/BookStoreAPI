@@ -39,6 +39,33 @@ namespace BookStoreAPI.Models
             }
         }
 
+        public void RemoveItem(int cartItemId)
+        {
+            var removedItem = Items.FirstOrDefault(x => x.Id == cartItemId);
+            if (removedItem != null)
+            {
+                if (removedItem.Quantity == 1)
+                {
+                    Items.Remove(removedItem);
+                }
+                removedItem.Quantity--;
+            }
+        }
+
+        public void RemoveItemWithProduct(int bookId)
+        {
+            var removedItem = Items.FirstOrDefault(x => x.BookId == bookId);
+            if (removedItem != null)
+            {
+                Items.Remove(removedItem);
+            }
+        }
+
+        public void ClearItems()
+        {
+            Items.Clear();       
+        }
+
     }
     public class ShoppingCartCreateDto
     {

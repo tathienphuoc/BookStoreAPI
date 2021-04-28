@@ -1,6 +1,8 @@
 using System;
 using BookStoreAPI.Interface;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
+
 namespace BookStoreAPI.Models
 {
     public class Book: IEntity
@@ -32,7 +34,7 @@ namespace BookStoreAPI.Models
     {
         public string ISBN { get; set; }
         public string Title { get; set; }
-        public string Image { get; set; }
+        public IFormFile Image { get; set; }
         public string Summary { get; set; }
         public string PublicationDate { get; set; }
         public int QuantityInStock { get; set; }

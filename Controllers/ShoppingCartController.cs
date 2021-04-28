@@ -27,9 +27,9 @@ namespace Controllers
             return service.GetAll();
         }
         [HttpGet("{id}")]
-        public ActionResult<ShoppingCart> GetShoppingCart(int id)
+        public async Task<ActionResult<ShoppingCart>> GetShoppingCart(int id)
         {
-            var ShoppingCart = service.GetDetail(id);
+            var ShoppingCart = await service.GetCartByUserName(id);
 
             if (ShoppingCart== null)
             {
@@ -66,12 +66,12 @@ namespace Controllers
         //     }
         // }
 
-        [HttpDelete("{id}")]
-        public ActionResult<ShoppingCart> DeleteShoppingCart(int id)
+        [HttpDelete("{cartId}/{cartItemId}")]
+        public ActionResult<ShoppingCart> DeleteShoppingCart(int cartId, int cartItemId)
         {
             try
             {
-                return service.Delete(id);
+                return service.RemoveItem(cartId, cartItemId);
             }
             catch (Exception error)
             {
@@ -80,4 +80,4 @@ namespace Controllers
         }
 
     }
-}   
+}    
