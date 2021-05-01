@@ -42,10 +42,10 @@ namespace BookStoreAPI.Models
 
         public void UpdateItem(int cartItemId, int quantity){
             var existingItem = Items.FirstOrDefault(i => i.Id == cartItemId);
-            // if(quantity == 0)
-            // {
-            //     Items.Remove(existingItem);
-            // } 
+            if(quantity == 0)
+            {
+                Items.Remove(existingItem);
+            }
             existingItem.Quantity = quantity;
         }
 

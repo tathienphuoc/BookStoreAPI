@@ -85,41 +85,65 @@ namespace BookStoreAPI.Data
                 new Category
                 {
                     Id = 1,
-                    Name = "Category 1"
+                    Name = "Action and Adventure"
                 },
                 new Category
                 {
                     Id = 2,
-                    Name = "Category 2"
+                    Name = "Classics"
                 },
                 new Category
                 {
                     Id = 3,
-                    Name = "Category 3"
+                    Name = "Comic"
+                }
+                ,
+                new Category
+                {
+                    Id = 4,
+                    Name = "Fantasy"
+                },
+                new Category
+                {
+                    Id = 5,
+                    Name = "Historical Fiction"
+                },
+                new Category
+                {
+                    Id = 6,
+                    Name = "Horror"
+                },
+                new Category
+                {
+                    Id = 7,
+                    Name = "Literary Fiction"
+                },
+                new Category
+                {
+                    Id = 8,
+                    Name = "Romance"
+                },
+                new Category
+                {
+                    Id = 9,
+                    Name = "Science Fiction"
+                },
+                new Category
+                {
+                    Id = 10,
+                    Name = "Short Stories"
+                },
+                new Category
+                {
+                    Id = 11,
+                    Name = "Suspense and Thrillers"
+                },
+                new Category
+                {
+                    Id = 12,
+                    Name = "Cookbooks"
                 }
             );
-
-            modelBuilder.Entity<BookCategory>().HasData(
-                new BookCategory
-                {
-                    Id = 1,
-                    BookId = 1,
-                    CategoryId = 1
-                },
-                new BookCategory
-                {
-                    Id = 2,
-                    BookId = 2,
-                    CategoryId = 2
-                },
-                new BookCategory
-                {
-                    Id = 3,
-                    BookId = 2,
-                    CategoryId = 3
-                }
-            );
-
             modelBuilder.Entity<AuthorBook>().HasData(
                 new AuthorBook
                 {
@@ -138,6 +162,26 @@ namespace BookStoreAPI.Data
                     Id = 3,
                     BookId = 2,
                     AuthorId = 3
+                }
+            );
+            modelBuilder.Entity<BookCategory>().HasData(
+                new BookCategory
+                {
+                    Id = 1,
+                    BookId = 1,
+                    CategoryId = 1
+                },
+                new BookCategory
+                {
+                    Id = 2,
+                    BookId = 2,
+                    CategoryId = 2
+                },
+                new BookCategory
+                {
+                    Id = 3,
+                    BookId = 2,
+                    CategoryId = 3
                 }
             );
             return modelBuilder;

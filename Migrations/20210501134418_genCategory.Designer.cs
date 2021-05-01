@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookStoreApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210421060000_CreateDb")]
-    partial class CreateDb
+    [Migration("20210501134418_genCategory")]
+    partial class genCategory
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -381,17 +381,62 @@ namespace BookStoreApi.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Category 1"
+                            Name = "Action and Adventure"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "Category 2"
+                            Name = "Classics"
                         },
                         new
                         {
                             Id = 3,
-                            Name = "Category 3"
+                            Name = "Comic"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Fantasy"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Historical Fiction"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Horror"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Literary Fiction"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Romance"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Science Fiction"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Short Stories"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "Suspense and Thrillers"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Name = "Cookbooks"
                         });
                 });
 

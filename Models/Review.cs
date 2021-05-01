@@ -21,7 +21,7 @@ namespace BookStoreAPI.Models
         public int BookId { get; set; }
         public string Content { get; set; }
         public DateTime CreatedAt { get; set; }
-        public bool Liked { get; set; }
+        public int quantity { get; set; }
 
     }
     public class ReviewCreateDto

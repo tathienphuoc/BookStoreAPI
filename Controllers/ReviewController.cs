@@ -44,8 +44,7 @@ namespace BookStoreAPI.Controllers
                 AccountId = accountId,
                 BookId = reviewDto.BookId,
                 CreatedAt = DateTime.Now,
-                Content = reviewDto.Content,
-                Liked = true
+                Content = reviewDto.Content
             };
             _reviewService.repository.context.Reviews.Add(userReview);
             if(await _reviewService.repository.context.SaveChangesAsync() >0) return Ok(userReview);
@@ -64,7 +63,7 @@ namespace BookStoreAPI.Controllers
 
         [HttpGet("user-review")]
         public async Task<ActionResult<IEnumerable<Review>>> GetUserReview()
-        {
+        {   
             var result = await _reviewService.GetAllReview();
             return Ok(result); 
         }

@@ -35,6 +35,14 @@ namespace Controllers
             return Ok(result);
         }
 
+        [HttpGet("all")]
+        public ActionResult<IEnumerable<Book>> GetAll()
+        {
+            var result = service.GetAll();
+
+            return Ok(result);
+        }
+
         [HttpGet("{id}")]
         public ActionResult<Book> GetBook(int id)
         {

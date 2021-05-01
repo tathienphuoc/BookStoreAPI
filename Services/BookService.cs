@@ -42,7 +42,11 @@ namespace BookStoreAPI.Service
 
         public async Task<PagedList<Book>> GetBooksAsync(BookParams bookParams)
         { 
-            var query = repository.context.Books.AsQueryable();
+            var query = repository.context.Books
+                        .Include(x=>x.AuthorBooks).ThenInclude(y=>y.Author)
+                        .Include(x=>x.BookCategories).ThenInclude(y=>y.Category)
+                        .Include(x=>x.Order_Receipts)
+                        .Include(x=>x.Reviews).AsQueryable();
             if (bookParams.CategoryId != null)
             {
                 query = query.Where(b=>b.BookCategories
@@ -65,7 +69,11 @@ namespace BookStoreAPI.Service
 
         public Book GetDetail(int id)
         {
-            return repository.FindById(id);
+            return repository.context.Books
+                    .Include(x=>x.AuthorBooks).ThenInclude(y=>y.Author)
+                    .Include(x=>x.BookCategories).ThenInclude(y=>y.Category)
+                    .Include(x=>x.Order_Receipts).ThenInclude(y=>y.Books)
+                    .Include(x=>x.Reviews).FirstOrDefault(x=>x.Id == id);
         }
 
         public Book GetDetail(string isbn)

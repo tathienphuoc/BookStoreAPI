@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using BookStoreAPI.Models;
@@ -11,10 +13,12 @@ namespace BookStoreAPI.Data
     {
         public static async Task SeedBooks(ApplicationDbContext context)
         {
+            Random rnd = new Random();
             if (await context.Books.CountAsync()>2) return;
             var bookData = await System.IO.File.ReadAllTextAsync("Data/BookData.json");
             var books = JsonSerializer.Deserialize<List<Book>>(bookData);
             int i = 3;
+            int k = 1;
             foreach (var book in books)
             {
                 book.Id = i++;
@@ -28,8 +32,23 @@ namespace BookStoreAPI.Data
                 book.Sold = 0;
                 book.Discount = 0;
                 book.PublisherId = 1;
-
-                context.Books.Add(book);
+                await context.Books.AddAsync(book);
+                for (int j = 0; j < rnd.Next(1,3); j++)
+                {
+                    var bookCategory = new BookCategory(){
+                        Id = k++,
+                        BookId = book.Id,
+                        CategoryId = rnd.Next(1, 13)
+                    };
+                    var check = context.BookCategories
+                        .Any(x=>x.BookId == bookCategory.BookId && 
+                                    x.CategoryId == bookCategory.CategoryId);
+                    if (!check)
+                    {
+                        await context.BookCategories.AddAsync(bookCategory);
+                        await context.SaveChangesAsync();
+                    }
+                }
             }
             await context.SaveChangesAsync();
         }
