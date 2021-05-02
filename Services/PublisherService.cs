@@ -23,7 +23,7 @@ namespace BookStoreAPI.Service
 
         public Publisher GetDetail(int id)
         {
-            return repository.FindById(id);
+            return repository.context.Publishers.FirstOrDefault(x=>x.Id == id);
         }
 
         public Publisher GetDetail(string name)

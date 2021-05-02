@@ -27,6 +27,7 @@ namespace BookStoreApi
                 await context.Database.MigrateAsync();
                 var userManager = services.GetRequiredService<UserManager<Account>>();
                 var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
+                await AuthorSeed.SeedAuthor(context);
                 await BookSeed.SeedBooks(context);
                 await UserSeed.SeedUsers(userManager, roleManager);
             }

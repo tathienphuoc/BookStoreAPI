@@ -19,10 +19,12 @@ namespace Controllers
     public class BookController : ControllerBase
     {
         private readonly BookService service;
+        private readonly IPhotoService _photoService;
 
-        public BookController(BookService service)
+        public BookController(BookService service, IPhotoService photoService)
         {
             this.service = service;
+            _photoService = photoService;
         }
         // [Authorize(Roles = "Admin")]
         [HttpGet]
@@ -56,11 +58,12 @@ namespace Controllers
             return Book;
         }
         [HttpPost]
-        public ActionResult<Book> Create([FromForm]BookCreateDto BookCreateDto)
+        public async Task<ActionResult<Book>> CreateAsync([FromForm]BookCreateDto BookCreateDto)
         {
             try
             {
-                return service.Create(BookCreateDto);
+                var url = await _photoService.AddPhotoAsync(BookCreateDto.Image);
+                return service.Create(BookCreateDto,url);
             }
             catch (ArgumentException error){
                 return NotFound(error.Message); 

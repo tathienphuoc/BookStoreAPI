@@ -19,6 +19,7 @@ namespace BookStoreAPI.Data
             var books = JsonSerializer.Deserialize<List<Book>>(bookData);
             int i = 3;
             int k = 1;
+            int h = 1;
             foreach (var book in books)
             {
                 book.Id = i++;
@@ -31,8 +32,12 @@ namespace BookStoreAPI.Data
                 book.QuantityInStock = 0;
                 book.Sold = 0;
                 book.Discount = 0;
-                book.PublisherId = 1;
+                int temp = rnd.Next(1,9);
+                book.PublisherId = temp;
+                var publisher = context.Publishers.FirstOrDefault(x=>x.Id == temp);
+                book.Publisher = publisher;
                 await context.Books.AddAsync(book);
+                await context.SaveChangesAsync();
                 for (int j = 0; j < rnd.Next(1,3); j++)
                 {
                     var bookCategory = new BookCategory(){
@@ -46,6 +51,22 @@ namespace BookStoreAPI.Data
                     if (!check)
                     {
                         await context.BookCategories.AddAsync(bookCategory);
+                        await context.SaveChangesAsync();
+                    }
+                }
+                for (int j = 0; j < rnd.Next(1,5); j++)
+                {
+                    var authorBook = new AuthorBook(){
+                        Id = h++,
+                        BookId = book.Id,
+                        AuthorId = rnd.Next(1, 24)
+                    };
+                    var check = context.AuthorBooks
+                        .Any(x=>x.BookId == authorBook.BookId && 
+                                    x.AuthorId == authorBook.AuthorId);
+                    if (!check)
+                    {
+                        await context.AuthorBooks.AddAsync(authorBook);
                         await context.SaveChangesAsync();
                     }
                 }

@@ -6,6 +6,7 @@ using BookStoreAPI.Helpers;
 using BookStoreAPI.Models;
 using BookStoreAPI.Repository;
 using BookStoreAPI.Utils;
+using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -46,7 +47,8 @@ namespace BookStoreAPI.Service
                         .Include(x=>x.AuthorBooks).ThenInclude(y=>y.Author)
                         .Include(x=>x.BookCategories).ThenInclude(y=>y.Category)
                         .Include(x=>x.Order_Receipts)
-                        .Include(x=>x.Reviews).AsQueryable();
+                        .Include(x=>x.Reviews)
+                        .AsQueryable();
             if (bookParams.CategoryId != null)
             {
                 query = query.Where(b=>b.BookCategories
@@ -59,7 +61,7 @@ namespace BookStoreAPI.Service
             }
             if (!String.IsNullOrEmpty(bookParams.TitleSearch))
             {
-                query = query.Where(b=>b.Title.Contains(bookParams.TitleSearch))
+                query = query.Where(b=>b.Title.ToLower().Contains(bookParams.TitleSearch.ToLower()))
                         .AsQueryable();
             }
             return await PagedList<Book>.CreateAsync(query,
@@ -70,6 +72,7 @@ namespace BookStoreAPI.Service
         public Book GetDetail(int id)
         {
             return repository.context.Books
+                    .Include(x=>x.Publisher)
                     .Include(x=>x.AuthorBooks).ThenInclude(y=>y.Author)
                     .Include(x=>x.BookCategories).ThenInclude(y=>y.Category)
                     .Include(x=>x.Order_Receipts).ThenInclude(y=>y.Books)
@@ -82,7 +85,7 @@ namespace BookStoreAPI.Service
             return repository.FindAll().Where(c => c.ISBN.Equals(isbn)).FirstOrDefault();
         }
 
-        public Book Create(BookCreateDto dto){
+        public Book Create(BookCreateDto dto,ImageUploadResult url){
             if(!categoryService.Exist(dto.CategoryId)){
                 throw new ArgumentException("One/Some of categories not existed");
             }
@@ -98,13 +101,11 @@ namespace BookStoreAPI.Service
             if (publisherService.GetDetail(dto.PublisherId) == null){
                 throw new ArgumentException("Publisher not existed");
             }
-            var saveImage = new FileService(_webHost);
-            var path = saveImage.Save(dto.Image);
     
             var entity = new Book{
                 ISBN = FormatString.Trim_MultiSpaces_Title(dto.ISBN),
                 Title = dto.Title,
-                Image = path,
+                Image = url.SecureUrl.AbsoluteUri,
                 // Image = FormatString.Trim_MultiSpaces_Title(dto.Image),
                 Summary = dto.Summary,
                 PublicationDate = dto.PublicationDate,

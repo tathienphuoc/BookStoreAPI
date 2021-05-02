@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BookStoreApi.Migrations
 {
-    public partial class genCategory : Migration
+    public partial class genNewDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -455,17 +455,17 @@ namespace BookStoreApi.Migrations
             migrationBuilder.InsertData(
                 table: "Authors",
                 columns: new[] { "Id", "Biography", "FullName", "Image" },
-                values: new object[] { 1, "Author Biography 1", "Author FullName 1", "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg" });
+                values: new object[] { 1, "William Shakespeare was an English poet, playwright, and actor. He was born on 26 April 1564 in Stratford-upon-Avon. His father was a successful local businessman and his mother was the daughter of a landowner. Shakespeare is widely regarded as the greatest writer in the English language and the world's pre-eminent dramatist. He is often called England's national poet and nicknamed the Bard of Avon. He wrote about 38 plays, 154 sonnets, two long narrative poems, and a few other verses, of which the authorship of some is uncertain. His plays have been translated into every major living language and are performed more often than those of any other playwright.", "William Shakespeare", "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Shakespeare.jpg/220px-Shakespeare.jpg" });
 
             migrationBuilder.InsertData(
                 table: "Authors",
                 columns: new[] { "Id", "Biography", "FullName", "Image" },
-                values: new object[] { 2, "Author Biography 2", "Author FullName 2", "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg" });
+                values: new object[] { 2, "Emily Dickinson was born on December 10, 1830, in Amherst, Massachusetts. ... While Dickinson was extremely prolific as a poet and regularly enclosed poems in letters to friends, she was not publicly recognized during her lifetime. The first volume of her work was published posthumously in 1890 and the last in 1955.", "Emily Elizabeth Dickinson", "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Emily_Dickinson_daguerreotype_%28Restored%29.jpg/220px-Emily_Dickinson_daguerreotype_%28Restored%29.jpg" });
 
             migrationBuilder.InsertData(
                 table: "Authors",
                 columns: new[] { "Id", "Biography", "FullName", "Image" },
-                values: new object[] { 3, "Author Biography 3", "Author FullName 3", "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg" });
+                values: new object[] { 3, "Howard Phillips Lovecraft was born on December 10, 1830, in Amherst, Massachusetts. ... While Dickinson was extremely prolific as a poet and regularly enclosed poems in letters to friends, she was not publicly recognized during her lifetime. The first volume of her work was published posthumously in 1890 and the last in 1955.", "Howard Phillips Lovecraft", "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/H._P._Lovecraft%2C_June_1934.jpg/220px-H._P._Lovecraft%2C_June_1934.jpg" });
 
             migrationBuilder.InsertData(
                 table: "Categories",
@@ -485,11 +485,6 @@ namespace BookStoreApi.Migrations
             migrationBuilder.InsertData(
                 table: "Categories",
                 columns: new[] { "Id", "Name" },
-                values: new object[] { 9, "Science Fiction" });
-
-            migrationBuilder.InsertData(
-                table: "Categories",
-                columns: new[] { "Id", "Name" },
                 values: new object[] { 8, "Romance" });
 
             migrationBuilder.InsertData(
@@ -500,7 +495,7 @@ namespace BookStoreApi.Migrations
             migrationBuilder.InsertData(
                 table: "Categories",
                 columns: new[] { "Id", "Name" },
-                values: new object[] { 6, "Horror" });
+                values: new object[] { 9, "Science Fiction" });
 
             migrationBuilder.InsertData(
                 table: "Categories",
@@ -528,14 +523,49 @@ namespace BookStoreApi.Migrations
                 values: new object[] { 1, "Action and Adventure" });
 
             migrationBuilder.InsertData(
-                table: "Publishers",
-                columns: new[] { "Id", "Image", "Name" },
-                values: new object[] { 1, "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg", "Publisher 1" });
+                table: "Categories",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 6, "Horror" });
 
             migrationBuilder.InsertData(
                 table: "Publishers",
                 columns: new[] { "Id", "Image", "Name" },
-                values: new object[] { 2, "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg", "Publisher 2" });
+                values: new object[] { 7, "https://upload.wikimedia.org/wikipedia/vi/thumb/a/ac/NXBTrelogo.jpeg/220px-NXBTrelogo.jpeg", "Nhà xuất bản Tư pháp" });
+
+            migrationBuilder.InsertData(
+                table: "Publishers",
+                columns: new[] { "Id", "Image", "Name" },
+                values: new object[] { 1, "https://upload.wikimedia.org/wikipedia/vi/3/3b/Logo_nxb_Kim_Đồng.png", "Nhà xuất bản Kim Đồng" });
+
+            migrationBuilder.InsertData(
+                table: "Publishers",
+                columns: new[] { "Id", "Image", "Name" },
+                values: new object[] { 2, "https://upload.wikimedia.org/wikipedia/vi/thumb/a/ac/NXBTrelogo.jpeg/220px-NXBTrelogo.jpeg", "Nhà xuất bản Trẻ" });
+
+            migrationBuilder.InsertData(
+                table: "Publishers",
+                columns: new[] { "Id", "Image", "Name" },
+                values: new object[] { 3, "https://upload.wikimedia.org/wikipedia/vi/thumb/a/ac/NXBTrelogo.jpeg/220px-NXBTrelogo.jpeg", "Nhà xuất bản Tổng hợp thành phố Hồ Chí Minh" });
+
+            migrationBuilder.InsertData(
+                table: "Publishers",
+                columns: new[] { "Id", "Image", "Name" },
+                values: new object[] { 4, "https://upload.wikimedia.org/wikipedia/vi/thumb/a/ac/NXBTrelogo.jpeg/220px-NXBTrelogo.jpeg", "Nhà xuất bản chính trị quốc gia sự thật" });
+
+            migrationBuilder.InsertData(
+                table: "Publishers",
+                columns: new[] { "Id", "Image", "Name" },
+                values: new object[] { 5, "https://upload.wikimedia.org/wikipedia/vi/thumb/a/ac/NXBTrelogo.jpeg/220px-NXBTrelogo.jpeg", "Nhà xuất bản giáo dục" });
+
+            migrationBuilder.InsertData(
+                table: "Publishers",
+                columns: new[] { "Id", "Image", "Name" },
+                values: new object[] { 6, "https://upload.wikimedia.org/wikipedia/vi/thumb/a/ac/NXBTrelogo.jpeg/220px-NXBTrelogo.jpeg", "Nhà xuất bản Hội Nhà văn" });
+
+            migrationBuilder.InsertData(
+                table: "Publishers",
+                columns: new[] { "Id", "Image", "Name" },
+                values: new object[] { 8, "https://upload.wikimedia.org/wikipedia/vi/thumb/a/ac/NXBTrelogo.jpeg/220px-NXBTrelogo.jpeg", "Nhà xuất bản thông tin và truyền thông" });
 
             migrationBuilder.InsertData(
                 table: "Books",

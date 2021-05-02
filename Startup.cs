@@ -38,7 +38,7 @@ namespace BookStoreApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // services.AddControllers();
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
@@ -83,7 +83,7 @@ namespace BookStoreApi
                         ValidateAudience = false
                     };
                 });
-
+            services.AddScoped<IPhotoService, PhotoService>();
             services
 
             .AddScoped<AccountRepository>()
