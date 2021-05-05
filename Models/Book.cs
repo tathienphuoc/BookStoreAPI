@@ -47,8 +47,20 @@ namespace BookStoreAPI.Models
         public List<int> CategoryId { get; set; }
     }
 
-    public class BookUpdateDto : BookCreateDto
+    public class BookUpdateDto
     {
         public int Id { get; set; }
+        public string ISBN { get; set; }
+        public string Title { get; set; }
+        public IFormFile Image { get; set; }
+        public string Summary { get; set; }
+        public string PublicationDate { get; set; }
+        public int QuantityInStock { get; set; }
+        public decimal Price { get; set; }
+        public int Sold { get; set; }
+        public int Discount { get; set; }
+        public List<int> CategoryId { get; set; }
+        public int PublisherId { get; set; }
+        public List<int> AuthorId{ get; set; }
     }
 }

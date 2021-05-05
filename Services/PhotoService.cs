@@ -30,8 +30,7 @@ namespace BookStoreAPI.Services
                 using var stream = file.OpenReadStream();
                 var uploadParams = new ImageUploadParams
                 {
-                    File = new FileDescription(file.FileName, stream),
-                    Transformation = new Transformation().Height(257).Width(400).Crop("fill")
+                    File = new FileDescription(file.FileName, stream)
                 };
                 uploadResult = await _cloudinary.UploadAsync(uploadParams);
             }

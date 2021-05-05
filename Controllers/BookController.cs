@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using BookStoreAPI.Services;
 using BookStoreAPI.Interfaces;
+using CloudinaryDotNet.Actions;
 
 namespace Controllers
 {
@@ -76,11 +77,16 @@ namespace Controllers
         
         [Authorize(Roles = "Admin")]
         [HttpPut]
-        public ActionResult<Book> Update(BookUpdateDto BookUpdateDto)
+        public async Task<ActionResult<Book>> UpdateAsync([FromForm] BookUpdateDto BookUpdateDto)
         {
             try
             {
-                return service.Update(BookUpdateDto);
+                ImageUploadResult url = null;
+                if (BookUpdateDto.Image != null)
+                {
+                    url = await _photoService.AddPhotoAsync(BookUpdateDto.Image);   
+                }
+                return service.Update(BookUpdateDto, url);
             }
             catch (ArgumentException error){
                 return NotFound(error.Message); 
