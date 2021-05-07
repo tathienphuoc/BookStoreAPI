@@ -10,11 +10,11 @@ namespace Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class Order_ReceiptController : ControllerBase
+    public class OrderReceiptController : ControllerBase
     {
         private readonly Order_ReceiptService service;
 
-        public Order_ReceiptController(Order_ReceiptService service)
+        public OrderReceiptController(Order_ReceiptService service)
         {
             this.service = service;
         }
@@ -39,11 +39,11 @@ namespace Controllers
         }
 
         [HttpPost]
-        public ActionResult<Order_Receipt> Create(Order_ReceiptCreateDto Order_ReceiptCreateDto)
+        public async Task<ActionResult<Order_Receipt>> CreateAsync([FromForm]Order_ReceiptCreateDto Order_ReceiptCreateDto)
         {
             try
             {
-                return service.Create(Order_ReceiptCreateDto);
+                return await service.Create(Order_ReceiptCreateDto);
             }
             catch (Exception error)
             {

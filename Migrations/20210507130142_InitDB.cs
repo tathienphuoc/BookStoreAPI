@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BookStoreApi.Migrations
 {
-    public partial class genNewDB : Migration
+    public partial class InitDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -137,27 +137,6 @@ namespace BookStoreApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Order_Receipts",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    CreatedAt = table.Column<string>(type: "TEXT", nullable: true),
-                    TotalPrice = table.Column<float>(type: "REAL", nullable: false),
-                    AccountId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Order_Receipts", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Order_Receipts_Users_AccountId",
-                        column: x => x.AccountId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ShoppingCarts",
                 columns: table => new
                 {
@@ -276,7 +255,7 @@ namespace BookStoreApi.Migrations
                     QuantityInStock = table.Column<int>(type: "INTEGER", nullable: false),
                     Price = table.Column<decimal>(type: "TEXT", nullable: false),
                     Sold = table.Column<int>(type: "INTEGER", nullable: false),
-                    Discount = table.Column<int>(type: "INTEGER", nullable: false),
+                    Discount = table.Column<float>(type: "REAL", nullable: false),
                     ShoppingCartId = table.Column<int>(type: "INTEGER", nullable: true),
                     PublisherId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
@@ -348,30 +327,6 @@ namespace BookStoreApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BookOrder_Receipt",
-                columns: table => new
-                {
-                    BooksId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Order_ReceiptsId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BookOrder_Receipt", x => new { x.BooksId, x.Order_ReceiptsId });
-                    table.ForeignKey(
-                        name: "FK_BookOrder_Receipt_Books_BooksId",
-                        column: x => x.BooksId,
-                        principalTable: "Books",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_BookOrder_Receipt_Order_Receipts_Order_ReceiptsId",
-                        column: x => x.Order_ReceiptsId,
-                        principalTable: "Order_Receipts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "CartItems",
                 columns: table => new
                 {
@@ -401,26 +356,31 @@ namespace BookStoreApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Order_ReceiptBooks",
+                name: "Order_Receipts",
                 columns: table => new
                 {
-                    BookId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Order_ReceiptId = table.Column<int>(type: "INTEGER", nullable: false),
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    TotalPrice = table.Column<decimal>(type: "TEXT", nullable: false),
+                    FullName = table.Column<string>(type: "TEXT", nullable: true),
+                    Phone = table.Column<string>(type: "TEXT", nullable: true),
+                    AccountId = table.Column<int>(type: "INTEGER", nullable: false),
+                    BookId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Order_ReceiptBooks", x => new { x.BookId, x.Order_ReceiptId });
+                    table.PrimaryKey("PK_Order_Receipts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Order_ReceiptBooks_Books_BookId",
+                        name: "FK_Order_Receipts_Books_BookId",
                         column: x => x.BookId,
                         principalTable: "Books",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Order_ReceiptBooks_Order_Receipts_Order_ReceiptId",
-                        column: x => x.Order_ReceiptId,
-                        principalTable: "Order_Receipts",
+                        name: "FK_Order_Receipts_Users_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -450,6 +410,60 @@ namespace BookStoreApi.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Order_ReceiptBooks",
+                columns: table => new
+                {
+                    BookId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Order_ReceiptId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Order_ReceiptBooks", x => new { x.BookId, x.Order_ReceiptId });
+                    table.ForeignKey(
+                        name: "FK_Order_ReceiptBooks_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Order_ReceiptBooks_Order_Receipts_Order_ReceiptId",
+                        column: x => x.Order_ReceiptId,
+                        principalTable: "Order_Receipts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrderItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Quantity = table.Column<int>(type: "INTEGER", nullable: false),
+                    UnitPrice = table.Column<decimal>(type: "TEXT", nullable: false),
+                    TotalPrice = table.Column<decimal>(type: "TEXT", nullable: false),
+                    BookId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Order_ReceiptId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Order_Receipts_Order_ReceiptId",
+                        column: x => x.Order_ReceiptId,
+                        principalTable: "Order_Receipts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.InsertData(
@@ -570,12 +584,12 @@ namespace BookStoreApi.Migrations
             migrationBuilder.InsertData(
                 table: "Books",
                 columns: new[] { "Id", "Discount", "ISBN", "Image", "Price", "PublicationDate", "PublisherId", "QuantityInStock", "ShoppingCartId", "Sold", "Summary", "Title" },
-                values: new object[] { 1, 0, "Book ISBN 1", "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg", 0m, "11:11 - 11/01/2021", 1, 0, null, 0, "Summary title 1", "Book title 1" });
+                values: new object[] { 1, 0f, "Book ISBN 1", "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg", 0m, "11:11 - 11/01/2021", 1, 0, null, 0, "Summary title 1", "Book title 1" });
 
             migrationBuilder.InsertData(
                 table: "Books",
                 columns: new[] { "Id", "Discount", "ISBN", "Image", "Price", "PublicationDate", "PublisherId", "QuantityInStock", "ShoppingCartId", "Sold", "Summary", "Title" },
-                values: new object[] { 2, 0, "Book ISBN 2", "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg", 0m, "22:22 - 22/01/2021", 1, 0, null, 0, "Summary title 2", "Book title 2" });
+                values: new object[] { 2, 0f, "Book ISBN 2", "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg", 0m, "22:22 - 22/01/2021", 1, 0, null, 0, "Summary title 2", "Book title 2" });
 
             migrationBuilder.InsertData(
                 table: "AuthorBooks",
@@ -618,11 +632,6 @@ namespace BookStoreApi.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookOrder_Receipt_Order_ReceiptsId",
-                table: "BookOrder_Receipt",
-                column: "Order_ReceiptsId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Books_PublisherId",
                 table: "Books",
                 column: "PublisherId");
@@ -657,6 +666,21 @@ namespace BookStoreApi.Migrations
                 name: "IX_Order_Receipts_AccountId",
                 table: "Order_Receipts",
                 column: "AccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Order_Receipts_BookId",
+                table: "Order_Receipts",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_BookId",
+                table: "OrderItems",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_Order_ReceiptId",
+                table: "OrderItems",
+                column: "Order_ReceiptId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reviews_BookId",
@@ -711,9 +735,6 @@ namespace BookStoreApi.Migrations
                 name: "BookCategories");
 
             migrationBuilder.DropTable(
-                name: "BookOrder_Receipt");
-
-            migrationBuilder.DropTable(
                 name: "CartItems");
 
             migrationBuilder.DropTable(
@@ -721,6 +742,9 @@ namespace BookStoreApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "Order_ReceiptBooks");
+
+            migrationBuilder.DropTable(
+                name: "OrderItems");
 
             migrationBuilder.DropTable(
                 name: "Reviews");
@@ -750,10 +774,10 @@ namespace BookStoreApi.Migrations
                 name: "Order_Receipts");
 
             migrationBuilder.DropTable(
-                name: "Books");
+                name: "Roles");
 
             migrationBuilder.DropTable(
-                name: "Roles");
+                name: "Books");
 
             migrationBuilder.DropTable(
                 name: "Publishers");

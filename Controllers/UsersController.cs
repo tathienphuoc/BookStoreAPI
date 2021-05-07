@@ -46,7 +46,7 @@ namespace BookStoreAPI.Controllers
         {
             var user = await _accountService.GetUserByUsernameAsync(username);
             var userToReturn = _mapper.Map<MemberDto>(user);
-            return Ok(userToReturn);
+            return Ok(user);
         }
 
         [HttpPut]

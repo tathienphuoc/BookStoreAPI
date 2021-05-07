@@ -51,7 +51,7 @@ namespace BookStoreAPI.Service
         {
             return await repository.context.Users
                 .Include(p => p.Reviews)
-                .Include(p => p.Order_Receipts)
+                .Include(p => p.Order_Receipts).ThenInclude(y=>y.OrderItems)
                 .SingleOrDefaultAsync(x => x.UserName == username);
         }
 

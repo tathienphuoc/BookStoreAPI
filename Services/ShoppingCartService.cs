@@ -69,20 +69,22 @@ namespace BookStoreAPI.Service
         }
 
         public ShoppingCart ChangeQuantity(ShoppingCartUpdateDto dto){
-            var cart = repository.FindById(dto.cartId);
+            var cart = repository.context.ShoppingCarts.Include(x=>x.Items)
+                    .FirstOrDefault(x=>x.Id == dto.cartId);
             cart.UpdateItem(dto.cartItemId, dto.quantity);
             repository.context.SaveChanges();
             return cart;
 
         }
 
-        private async Task<ShoppingCart> GetExistingOrCreateNewCart(int accountId)
+        public async Task<ShoppingCart> GetExistingOrCreateNewCart(int accountId)
         {
             var user = await _userManager.FindByIdAsync(accountId.ToString());
 
-            var cart = repository.FindAll()
-                    .Where(x => x.Account == user)
-                    .FirstOrDefault();
+            var cart = repository.context.ShoppingCarts
+                        .Include(x=>x.Items).ThenInclude(y=>y.Book)
+                        .Where(x => x.Account == user)
+                        .FirstOrDefault();
             if (cart != null)
             {
                 return cart;

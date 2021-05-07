@@ -16,8 +16,7 @@ namespace BookStoreAPI.Models
         
         public string LastUpdated { get; set; }
         public virtual List<CartItem> Items { get; set; } = new List<CartItem>();
-
-        public void AddItem(int bookId, int quantity = 1, string color = "Black", decimal unitPrice = 0)
+        public void AddItem(int bookId, int quantity = 1, decimal unitPrice = 0)
         {
             var existingItem = Items.FirstOrDefault(i => i.BookId == bookId);
 
@@ -47,6 +46,7 @@ namespace BookStoreAPI.Models
                 Items.Remove(existingItem);
             }
             existingItem.Quantity = quantity;
+            existingItem.TotalPrice = existingItem.Quantity * existingItem.UnitPrice;
         }
 
         public void RemoveItem(int cartItemId){

@@ -16,21 +16,6 @@ namespace BookStoreApi.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.4");
 
-            modelBuilder.Entity("BookOrder_Receipt", b =>
-                {
-                    b.Property<int>("BooksId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Order_ReceiptsId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("BooksId", "Order_ReceiptsId");
-
-                    b.HasIndex("Order_ReceiptsId");
-
-                    b.ToTable("BookOrder_Receipt");
-                });
-
             modelBuilder.Entity("BookStoreAPI.Models.Account", b =>
                 {
                     b.Property<int>("Id")
@@ -222,8 +207,8 @@ namespace BookStoreApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Discount")
-                        .HasColumnType("INTEGER");
+                    b.Property<float>("Discount")
+                        .HasColumnType("REAL");
 
                     b.Property<string>("ISBN")
                         .HasColumnType("TEXT");
@@ -267,7 +252,7 @@ namespace BookStoreApi.Migrations
                         new
                         {
                             Id = 1,
-                            Discount = 0,
+                            Discount = 0f,
                             ISBN = "Book ISBN 1",
                             Image = "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg",
                             Price = 0m,
@@ -281,7 +266,7 @@ namespace BookStoreApi.Migrations
                         new
                         {
                             Id = 2,
-                            Discount = 0,
+                            Discount = 0f,
                             ISBN = "Book ISBN 2",
                             Image = "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg",
                             Price = 0m,
@@ -461,6 +446,36 @@ namespace BookStoreApi.Migrations
                     b.ToTable("CreditCards");
                 });
 
+            modelBuilder.Entity("BookStoreAPI.Models.OrderItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("Order_ReceiptId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("Order_ReceiptId");
+
+                    b.ToTable("OrderItems");
+                });
+
             modelBuilder.Entity("BookStoreAPI.Models.Order_Receipt", b =>
                 {
                     b.Property<int>("Id")
@@ -470,15 +485,26 @@ namespace BookStoreApi.Migrations
                     b.Property<int>("AccountId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("CreatedAt")
+                    b.Property<int?>("BookId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<float>("TotalPrice")
-                        .HasColumnType("REAL");
+                    b.Property<string>("FullName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
+
+                    b.HasIndex("BookId");
 
                     b.ToTable("Order_Receipts");
                 });
@@ -709,21 +735,6 @@ namespace BookStoreApi.Migrations
                     b.ToTable("UserTokens");
                 });
 
-            modelBuilder.Entity("BookOrder_Receipt", b =>
-                {
-                    b.HasOne("BookStoreAPI.Models.Book", null)
-                        .WithMany()
-                        .HasForeignKey("BooksId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BookStoreAPI.Models.Order_Receipt", null)
-                        .WithMany()
-                        .HasForeignKey("Order_ReceiptsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("BookStoreAPI.Models.AuthorBook", b =>
                 {
                     b.HasOne("BookStoreAPI.Models.Author", "Author")
@@ -805,6 +816,21 @@ namespace BookStoreApi.Migrations
                     b.Navigation("Account");
                 });
 
+            modelBuilder.Entity("BookStoreAPI.Models.OrderItem", b =>
+                {
+                    b.HasOne("BookStoreAPI.Models.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BookStoreAPI.Models.Order_Receipt", null)
+                        .WithMany("OrderItems")
+                        .HasForeignKey("Order_ReceiptId");
+
+                    b.Navigation("Book");
+                });
+
             modelBuilder.Entity("BookStoreAPI.Models.Order_Receipt", b =>
                 {
                     b.HasOne("BookStoreAPI.Models.Account", "Account")
@@ -812,6 +838,10 @@ namespace BookStoreApi.Migrations
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("BookStoreAPI.Models.Book", null)
+                        .WithMany("Order_Receipts")
+                        .HasForeignKey("BookId");
 
                     b.Navigation("Account");
                 });
@@ -938,12 +968,19 @@ namespace BookStoreApi.Migrations
 
                     b.Navigation("BookCategories");
 
+                    b.Navigation("Order_Receipts");
+
                     b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("BookStoreAPI.Models.Category", b =>
                 {
                     b.Navigation("BookCategories");
+                });
+
+            modelBuilder.Entity("BookStoreAPI.Models.Order_Receipt", b =>
+                {
+                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("BookStoreAPI.Models.Publisher", b =>

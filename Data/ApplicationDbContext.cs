@@ -21,6 +21,7 @@ namespace BookStoreAPI.Data
     public DbSet<Category> Categories { get; set; }
     public DbSet<CreditCard> CreditCards { get; set; }
     public DbSet<Order_Receipt> Order_Receipts { get; set; }
+    public DbSet<OrderItem> OrderItems { get; set; }
     public DbSet<Publisher> Publishers { get; set; }
     public DbSet<Review> Reviews { get; set; }
     public DbSet<ShoppingCart> ShoppingCarts { get; set; }

@@ -16,7 +16,7 @@ namespace BookStoreAPI.Models
         public int QuantityInStock { get; set; }
         public decimal Price { get; set; }
         public int Sold { get; set; }
-        public int Discount { get; set; }
+        public float Discount { get; set; }
 
         public virtual ShoppingCart ShoppingCart { get; set; }
         public virtual List<AuthorBook> AuthorBooks { get; set; }
@@ -40,7 +40,7 @@ namespace BookStoreAPI.Models
         public int QuantityInStock { get; set; }
         public decimal Price { get; set; }
         public int Sold { get; set; }
-        public int Discount { get; set; }
+        public float Discount { get; set; }
         public List<int> AuthorId { get; set; }
         public int PublisherId { get; set; }
         public List<int> Order_ReceiptId { get; set; }
@@ -58,7 +58,7 @@ namespace BookStoreAPI.Models
         public int QuantityInStock { get; set; }
         public decimal Price { get; set; }
         public int Sold { get; set; }
-        public int Discount { get; set; }
+        public float Discount { get; set; }
         public List<int> CategoryId { get; set; }
         public int PublisherId { get; set; }
         public List<int> AuthorId{ get; set; }
