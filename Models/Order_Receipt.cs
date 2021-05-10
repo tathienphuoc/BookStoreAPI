@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using BookStoreAPI.Utils;
 using BookStoreAPI.Interface;
 using System;
+using BookStoreAPI.Models.OrderAggregate;
+
 namespace BookStoreAPI.Models
 {
     public class Order_Receipt: IEntity
@@ -15,6 +17,10 @@ namespace BookStoreAPI.Models
         public virtual Account Account { get; set; }
 
         public virtual List<OrderItem> OrderItems { get; set; }
+        public DeliveryMethod DeliveryMethod { get; set; } 
+        public OrderStatus Status { get; set; }
+        public OrderPaymentIntent PaymentIntent { get; set; }
+
     }
     public class Order_ReceiptCreateDto
     {

@@ -36,6 +36,20 @@ namespace BookStoreApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DeliveryMethods",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Type = table.Column<string>(type: "TEXT", nullable: true),
+                    Price = table.Column<decimal>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DeliveryMethods", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Publishers",
                 columns: table => new
                 {
@@ -366,6 +380,10 @@ namespace BookStoreApi.Migrations
                     FullName = table.Column<string>(type: "TEXT", nullable: true),
                     Phone = table.Column<string>(type: "TEXT", nullable: true),
                     AccountId = table.Column<int>(type: "INTEGER", nullable: false),
+                    DeliveryMethodId = table.Column<int>(type: "INTEGER", nullable: true),
+                    Status = table.Column<int>(type: "INTEGER", nullable: false),
+                    PaymentIntent_PaymentIndentId = table.Column<string>(type: "TEXT", nullable: true),
+                    PaymentIntent_ClientSecret = table.Column<string>(type: "TEXT", nullable: true),
                     BookId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
@@ -375,6 +393,12 @@ namespace BookStoreApi.Migrations
                         name: "FK_Order_Receipts_Books_BookId",
                         column: x => x.BookId,
                         principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Order_Receipts_DeliveryMethods_DeliveryMethodId",
+                        column: x => x.DeliveryMethodId,
+                        principalTable: "DeliveryMethods",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -673,6 +697,11 @@ namespace BookStoreApi.Migrations
                 column: "BookId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Order_Receipts_DeliveryMethodId",
+                table: "Order_Receipts",
+                column: "DeliveryMethodId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrderItems_BookId",
                 table: "OrderItems",
                 column: "BookId");
@@ -778,6 +807,9 @@ namespace BookStoreApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "Books");
+
+            migrationBuilder.DropTable(
+                name: "DeliveryMethods");
 
             migrationBuilder.DropTable(
                 name: "Publishers");

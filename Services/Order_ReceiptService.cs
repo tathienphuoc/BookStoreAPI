@@ -8,6 +8,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
+using BookStoreAPI.Models.OrderAggregate;
+using Stripe;
+using Microsoft.Extensions.Configuration;
+using OrderItem = BookStoreAPI.Models.OrderItem;
 
 namespace BookStoreAPI.Service
 {
@@ -16,11 +20,12 @@ namespace BookStoreAPI.Service
         private Order_ReceiptRepository repository;
         private readonly ShoppingCartService shoppingCartService;
         private readonly IMapper _mapper;
-
-        public Order_ReceiptService(Order_ReceiptRepository Order_ReceiptRepository, 
+        private readonly IConfiguration _config;
+        public Order_ReceiptService(Order_ReceiptRepository Order_ReceiptRepository,
                 ShoppingCartService shoppingCartService,
-                IMapper mapper)
+                IMapper mapper, IConfiguration config)
         {
+            this._config = config;
             this.shoppingCartService = shoppingCartService;
             _mapper = mapper;
             this.repository = Order_ReceiptRepository;
@@ -29,8 +34,8 @@ namespace BookStoreAPI.Service
         public List<Order_Receipt> GetAll()
         {
             return repository.context.Order_Receipts
-                    .Include(x=>x.OrderItems)
-                    .ThenInclude(y=>y.Book)
+                    .Include(x => x.OrderItems)
+                    .ThenInclude(y => y.Book)
                     .ToList();
         }
 
@@ -62,6 +67,63 @@ namespace BookStoreAPI.Service
             repository.Add(entity);
             repository.context.SaveChanges();
             return entity;
+        }
+
+        public async Task<OrderPaymentIntent> CreatePaymentIntentAsync(Order_Receipt order)
+        {
+            StripeConfiguration.ApiKey = _config["StripeSettings:SecretKey"];
+
+            var service = new PaymentIntentService();
+
+            var options = new PaymentIntentCreateOptions
+            {
+                Amount = Convert.ToInt64(order.TotalPrice) * 100,
+                Currency = "usd",
+                PaymentMethodTypes = new List<string> { "card" }
+            };
+
+            var confirmOptions = new PaymentIntentConfirmOptions
+            {
+                PaymentMethod = "pm_card_visa",
+            };
+
+
+            var intent = await service.CreateAsync(options);
+
+            order.PaymentIntent = new OrderPaymentIntent
+            {
+                PaymentIndentId = intent.Id,
+                ClientSecret = intent.ClientSecret
+            };
+            service.Confirm(
+                "pi_1Iot2fLPOnhkOL18yvR1BGjN",
+                confirmOptions
+            );
+
+            repository.Update(order);
+
+            return order.PaymentIntent;
+        }
+
+        public async Task<bool> UpdateOrderPaymentSucceeded(string paymentIntentId)
+        {
+            Console.WriteLine("Succeeded, PaymentIntentId: " + paymentIntentId);
+
+            var order = await repository.context.Order_Receipts
+                    .FirstOrDefaultAsync(x => x.PaymentIntent.PaymentIndentId == paymentIntentId);
+
+            if (order == null) return false;
+
+            order.Status = OrderStatus.Paid;
+
+            repository.Update(order);
+
+            return true;
+        }
+
+        public void UpdateOrderPaymentFailed(string paymentIntentId)
+        {
+            Console.WriteLine("Failed, PaymentIntentId: " + paymentIntentId);
         }
 
         public Order_Receipt Update(Order_ReceiptUpdateDto dto)

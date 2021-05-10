@@ -6,6 +6,13 @@ using BookStoreAPI.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using BookStoreAPI.Models.OrderAggregate;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
+using System.IO;
+using Stripe;
+using BookStoreAPI.DTOs;
+
 namespace Controllers
 {
     [Route("api/[controller]")]
@@ -13,10 +20,12 @@ namespace Controllers
     public class OrderReceiptController : ControllerBase
     {
         private readonly Order_ReceiptService service;
+        private readonly IConfiguration _config;
 
-        public OrderReceiptController(Order_ReceiptService service)
+        public OrderReceiptController(Order_ReceiptService service, IConfiguration config)
         {
             this.service = service;
+            this._config = config;
         }
 
         [HttpGet]
@@ -39,7 +48,7 @@ namespace Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Order_Receipt>> CreateAsync([FromForm]Order_ReceiptCreateDto Order_ReceiptCreateDto)
+        public async Task<ActionResult<Order_Receipt>> CreateAsync([FromForm] Order_ReceiptCreateDto Order_ReceiptCreateDto)
         {
             try
             {
@@ -49,6 +58,16 @@ namespace Controllers
             {
                 return Conflict(error.Message);
             }
+        }
+
+        [HttpPost("payment")]
+        public async Task<ActionResult<OrderPaymentIntent>> PaymentAsync(PaymentInput paymentInput)
+        {
+            var order = service.GetDetail(paymentInput.OrderId);
+
+            if (order == null) return BadRequest();
+
+            return await service.CreatePaymentIntentAsync(order);
         }
 
         [HttpPut]
@@ -62,6 +81,32 @@ namespace Controllers
             {
                 return Conflict(error.Message);
             }
+        }
+
+        [HttpPost("webhook")]
+        [AllowAnonymous]
+        public async Task<IActionResult> StripeWebhook()
+        {
+            var WhSecret = _config["StripeSettings:WebhookSecret"];
+
+            var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+            var stripeEvent = EventUtility.ConstructEvent(json, Request.Headers["Stripe-Signature"], WhSecret);
+
+            Stripe.PaymentIntent intent;
+
+            switch (stripeEvent.Type)
+            {
+                case "payment_intent.succeeded":
+                    intent = (Stripe.PaymentIntent)stripeEvent.Data.Object;
+                    await service.UpdateOrderPaymentSucceeded(intent.Id);
+                    break;
+                case "payment_intent.payment_failed":
+                    intent = (Stripe.PaymentIntent)stripeEvent.Data.Object;
+                    service.UpdateOrderPaymentFailed(intent.Id);
+                    break;
+            }
+
+            return new EmptyResult();
         }
 
         [HttpDelete("{id}")]

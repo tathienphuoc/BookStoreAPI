@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookStoreApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210507130142_InitDB")]
+    [Migration("20210509173722_InitDB")]
     partial class InitDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -448,6 +448,23 @@ namespace BookStoreApi.Migrations
                     b.ToTable("CreditCards");
                 });
 
+            modelBuilder.Entity("BookStoreAPI.Models.DeliveryMethod", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DeliveryMethods");
+                });
+
             modelBuilder.Entity("BookStoreAPI.Models.OrderItem", b =>
                 {
                     b.Property<int>("Id")
@@ -493,11 +510,17 @@ namespace BookStoreApi.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("DeliveryMethodId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("FullName")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Phone")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
 
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("TEXT");
@@ -507,6 +530,8 @@ namespace BookStoreApi.Migrations
                     b.HasIndex("AccountId");
 
                     b.HasIndex("BookId");
+
+                    b.HasIndex("DeliveryMethodId");
 
                     b.ToTable("Order_Receipts");
                 });
@@ -845,7 +870,34 @@ namespace BookStoreApi.Migrations
                         .WithMany("Order_Receipts")
                         .HasForeignKey("BookId");
 
+                    b.HasOne("BookStoreAPI.Models.DeliveryMethod", "DeliveryMethod")
+                        .WithMany()
+                        .HasForeignKey("DeliveryMethodId");
+
+                    b.OwnsOne("BookStoreAPI.Models.OrderAggregate.OrderPaymentIntent", "PaymentIntent", b1 =>
+                        {
+                            b1.Property<int>("Order_ReceiptId")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<string>("ClientSecret")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("PaymentIndentId")
+                                .HasColumnType("TEXT");
+
+                            b1.HasKey("Order_ReceiptId");
+
+                            b1.ToTable("Order_Receipts");
+
+                            b1.WithOwner()
+                                .HasForeignKey("Order_ReceiptId");
+                        });
+
                     b.Navigation("Account");
+
+                    b.Navigation("DeliveryMethod");
+
+                    b.Navigation("PaymentIntent");
                 });
 
             modelBuilder.Entity("BookStoreAPI.Models.Order_ReceiptBook", b =>
