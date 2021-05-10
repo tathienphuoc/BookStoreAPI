@@ -122,8 +122,18 @@ namespace Controllers
             }
         }
 
-
-
+        [HttpGet("delivery")]
+        public ActionResult<List<DeliveryMethod>> getAllDeliveryMethod()
+        {
+            try
+            {
+                return service.GetDeliveryMethods();
+            }
+            catch (Exception error)
+            {
+                return Conflict(error.Message);
+            }
+        }
 
     }
 }

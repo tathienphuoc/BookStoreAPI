@@ -379,6 +379,7 @@ namespace BookStoreApi.Migrations
                     TotalPrice = table.Column<decimal>(type: "TEXT", nullable: false),
                     FullName = table.Column<string>(type: "TEXT", nullable: true),
                     Phone = table.Column<string>(type: "TEXT", nullable: true),
+                    Email = table.Column<string>(type: "TEXT", nullable: true),
                     AccountId = table.Column<int>(type: "INTEGER", nullable: false),
                     DeliveryMethodId = table.Column<int>(type: "INTEGER", nullable: true),
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
@@ -513,12 +514,12 @@ namespace BookStoreApi.Migrations
             migrationBuilder.InsertData(
                 table: "Categories",
                 columns: new[] { "Id", "Name" },
-                values: new object[] { 11, "Suspense and Thrillers" });
+                values: new object[] { 10, "Short Stories" });
 
             migrationBuilder.InsertData(
                 table: "Categories",
                 columns: new[] { "Id", "Name" },
-                values: new object[] { 10, "Short Stories" });
+                values: new object[] { 9, "Science Fiction" });
 
             migrationBuilder.InsertData(
                 table: "Categories",
@@ -533,7 +534,7 @@ namespace BookStoreApi.Migrations
             migrationBuilder.InsertData(
                 table: "Categories",
                 columns: new[] { "Id", "Name" },
-                values: new object[] { 9, "Science Fiction" });
+                values: new object[] { 11, "Suspense and Thrillers" });
 
             migrationBuilder.InsertData(
                 table: "Categories",
@@ -564,6 +565,26 @@ namespace BookStoreApi.Migrations
                 table: "Categories",
                 columns: new[] { "Id", "Name" },
                 values: new object[] { 6, "Horror" });
+
+            migrationBuilder.InsertData(
+                table: "DeliveryMethods",
+                columns: new[] { "Id", "Price", "Type" },
+                values: new object[] { 4, 3.4m, "Việt Nam Post" });
+
+            migrationBuilder.InsertData(
+                table: "DeliveryMethods",
+                columns: new[] { "Id", "Price", "Type" },
+                values: new object[] { 3, 3.2m, "Viettel Post" });
+
+            migrationBuilder.InsertData(
+                table: "DeliveryMethods",
+                columns: new[] { "Id", "Price", "Type" },
+                values: new object[] { 1, 3.5m, "Giao hàng tiết kiệm" });
+
+            migrationBuilder.InsertData(
+                table: "DeliveryMethods",
+                columns: new[] { "Id", "Price", "Type" },
+                values: new object[] { 2, 3.0m, "Giao hàng nhanh" });
 
             migrationBuilder.InsertData(
                 table: "Publishers",

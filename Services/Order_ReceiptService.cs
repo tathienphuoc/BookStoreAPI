@@ -36,6 +36,8 @@ namespace BookStoreAPI.Service
             return repository.context.Order_Receipts
                     .Include(x => x.OrderItems)
                     .ThenInclude(y => y.Book)
+                    .Include(x=>x.DeliveryMethod)
+                    .Include(x=>x.PaymentIntent)
                     .ToList();
         }
 
@@ -46,6 +48,7 @@ namespace BookStoreAPI.Service
 
         public async Task<Order_Receipt> Create(Order_ReceiptCreateDto dto)
         {
+            var delivery = await repository.context.DeliveryMethods.FirstOrDefaultAsync(x=>x.Id == dto.DeliveryId);
             var cart = await shoppingCartService.GetCartByUserName(dto.AccountId);
             var items = cart.Items;
             var OrderItems = _mapper.Map<List<OrderItem>>(items);
@@ -58,10 +61,13 @@ namespace BookStoreAPI.Service
             {
                 FullName = dto.FullName,
                 Phone = dto.Phone,
+                Email = dto.Email,
                 AccountId = dto.AccountId,
                 CreatedAt = dto.CreatedAt,
                 OrderItems = OrderItems,
-                TotalPrice = total,
+                DeliveryMethod = delivery,
+                Status = OrderStatus.Paid,
+                TotalPrice = total + delivery.Price,
             };
             cart.ClearItems();
             repository.Add(entity);
@@ -84,9 +90,8 @@ namespace BookStoreAPI.Service
 
             var confirmOptions = new PaymentIntentConfirmOptions
             {
-                PaymentMethod = "pm_card_visa",
+                PaymentMethod = "pm_card_visa"
             };
-
 
             var intent = await service.CreateAsync(options);
 
@@ -96,7 +101,7 @@ namespace BookStoreAPI.Service
                 ClientSecret = intent.ClientSecret
             };
             service.Confirm(
-                "pi_1Iot2fLPOnhkOL18yvR1BGjN",
+                intent.Id,
                 confirmOptions
             );
 
@@ -159,6 +164,12 @@ namespace BookStoreAPI.Service
             //     throw new Exception("Book has been used!");
 
             return repository.Delete(id);
+        }
+
+        public List<DeliveryMethod> GetDeliveryMethods()
+        {
+            var deliveryMethods = repository.context.DeliveryMethods.ToList();
+            return deliveryMethods;
         }
 
 

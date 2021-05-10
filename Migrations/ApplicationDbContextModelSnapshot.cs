@@ -461,6 +461,32 @@ namespace BookStoreApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("DeliveryMethods");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Price = 3.5m,
+                            Type = "Giao hàng tiết kiệm"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Price = 3.0m,
+                            Type = "Giao hàng nhanh"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Price = 3.2m,
+                            Type = "Viettel Post"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Price = 3.4m,
+                            Type = "Việt Nam Post"
+                        });
                 });
 
             modelBuilder.Entity("BookStoreAPI.Models.OrderItem", b =>
@@ -510,6 +536,9 @@ namespace BookStoreApi.Migrations
 
                     b.Property<int?>("DeliveryMethodId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("FullName")
                         .HasColumnType("TEXT");

@@ -220,6 +220,28 @@ namespace BookStoreAPI.Data
                     CategoryId = 3
                 }
             );
+            modelBuilder.Entity<DeliveryMethod>().HasData(
+                new DeliveryMethod(){
+                    Id = 1,
+                    Price = 3.5M,
+                    Type = "Giao hàng tiết kiệm"
+                },
+                new DeliveryMethod() {
+                    Id = 2,
+                    Price = 3.0M,
+                    Type = "Giao hàng nhanh",
+                },
+                new DeliveryMethod(){
+                    Id = 3,
+                    Price = 3.2M,
+                    Type = "Viettel Post"
+                },
+                new DeliveryMethod(){
+                    Id = 4,
+                    Price = 3.4M,
+                    Type = "Việt Nam Post"
+                }
+            );
             return modelBuilder;
         }
     }
