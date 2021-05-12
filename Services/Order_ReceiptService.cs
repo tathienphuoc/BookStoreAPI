@@ -41,6 +41,17 @@ namespace BookStoreAPI.Service
                     .ToList();
         }
 
+        public List<Order_Receipt> GetOrdersByUser(int userId)
+        {
+            var orders = repository.context.Order_Receipts
+                        .Include(x=>x.Account)
+                        .Include(x=>x.OrderItems).ThenInclude(y=>y.Book)
+                        .Include(x=>x.DeliveryMethod)
+                        .OrderByDescending(x=>x.CreatedAt)
+                        .Where(x=>x.AccountId == userId).ToList();
+            return orders;
+        }
+
         public Order_Receipt GetDetail(int id)
         {
             return repository.FindById(id);

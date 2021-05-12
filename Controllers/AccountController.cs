@@ -55,6 +55,7 @@ namespace BookStoreAPI.Controllers
                 FullName = user.FullName,
                 Token = await _tokenService.CreateTokenAsync(user),
                 HomeAddress = user.HomeAddress, 
+                Email = user.Email,
                 Image = user.Image,
                 PhoneNumber = user.PhoneNumber
             };
@@ -76,6 +77,7 @@ namespace BookStoreAPI.Controllers
                 Token = await _tokenService.CreateTokenAsync(user),
                 HomeAddress = user.HomeAddress,
                 Image = user.Image,
+                Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 Username = user.UserName,
             };

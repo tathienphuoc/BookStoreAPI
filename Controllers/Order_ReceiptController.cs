@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using System.IO;
 using Stripe;
 using BookStoreAPI.DTOs;
+using BookStoreAPI.Helpers;
 
 namespace Controllers
 {
@@ -34,10 +35,11 @@ namespace Controllers
             return service.GetAll();
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<Order_Receipt> GetOrder_Receipt(int id)
+        [HttpGet("{idUser}")]
+        public ActionResult<List<Order_Receipt>> GetOrdersOfUser(int idUser)
         {
-            var Order_Receipt = service.GetDetail(id);
+            var userId = User.GetUserId();
+            var Order_Receipt = service.GetOrdersByUser(userId);
 
             if (Order_Receipt == null)
             {
