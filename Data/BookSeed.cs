@@ -28,7 +28,7 @@ namespace BookStoreAPI.Data
                 book.Image = book.Image;
                 book.Price = book.Price;
                 book.Summary = book.Summary;
-                book.PublicationDate = "11:11 - 11/01/2021";
+                book.PublicationDate = DateTime.Now;
                 book.QuantityInStock = 0;
                 book.Sold = 0;
                 book.Discount = 0;

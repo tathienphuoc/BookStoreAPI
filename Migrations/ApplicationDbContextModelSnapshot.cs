@@ -219,7 +219,7 @@ namespace BookStoreApi.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("PublicationDate")
+                    b.Property<DateTime>("PublicationDate")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("PublisherId")
@@ -256,7 +256,7 @@ namespace BookStoreApi.Migrations
                             ISBN = "Book ISBN 1",
                             Image = "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg",
                             Price = 0m,
-                            PublicationDate = "11:11 - 11/01/2021",
+                            PublicationDate = new DateTime(2021, 5, 12, 9, 32, 34, 527, DateTimeKind.Local).AddTicks(4110),
                             PublisherId = 1,
                             QuantityInStock = 0,
                             Sold = 0,
@@ -270,7 +270,7 @@ namespace BookStoreApi.Migrations
                             ISBN = "Book ISBN 2",
                             Image = "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg",
                             Price = 0m,
-                            PublicationDate = "22:22 - 22/01/2021",
+                            PublicationDate = new DateTime(2021, 5, 12, 9, 32, 34, 542, DateTimeKind.Local).AddTicks(4830),
                             PublisherId = 1,
                             QuantityInStock = 0,
                             Sold = 0,

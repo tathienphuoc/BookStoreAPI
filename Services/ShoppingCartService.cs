@@ -11,6 +11,7 @@ using BookStoreAPI.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BookStoreAPI.Service
 {
@@ -45,7 +46,7 @@ namespace BookStoreAPI.Service
         {
             var book = repository.context.Books.Find(dto.BookId);
             var cart = await GetExistingOrCreateNewCart(dto.AccountId);
-            cart.AddItem(book.Id, unitPrice:book.Price);
+            cart.AddItem(book.Id, book, unitPrice: book.Price);
             repository.context.ShoppingCarts.Update(cart);
             var result = await repository.context.SaveChangesAsync() > 0;
             return result;
@@ -69,12 +70,25 @@ namespace BookStoreAPI.Service
         }
 
         public ShoppingCart ChangeQuantity(ShoppingCartUpdateDto dto){
-            var cart = repository.context.ShoppingCarts.Include(x=>x.Items)
-                    .FirstOrDefault(x=>x.Id == dto.cartId);
+            var cart = repository.context.ShoppingCarts
+                        .Include(x=>x.Items)
+                        .ThenInclude(y=>y.Book)
+                        .FirstOrDefault(x=>x.Id == dto.cartId);
             cart.UpdateItem(dto.cartItemId, dto.quantity);
             repository.context.SaveChanges();
             return cart;
 
+        }
+
+        public async Task<ShoppingCart> RemoveItemsAsync(int cartItemId, int userId)
+        {
+            var cart = repository.context.ShoppingCarts
+                        .Include(x=>x.Items).ThenInclude(y=>y.Book)
+                        .Where(x => x.AccountId == userId)
+                        .FirstOrDefault();
+            cart.RemoveItemsWithId(cartItemId);
+            await repository.context.SaveChangesAsync();
+            return cart;
         }
 
         public async Task<ShoppingCart> GetExistingOrCreateNewCart(int accountId)

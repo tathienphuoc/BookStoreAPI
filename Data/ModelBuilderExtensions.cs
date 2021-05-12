@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using BookStoreAPI.Utils;
 using System.Text.Json;
 using System.Collections.Generic;
+using System;
 
 namespace BookStoreAPI.Data
 {
@@ -94,7 +95,7 @@ namespace BookStoreAPI.Data
                     Title = "Book title 1",
                     Image = "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg",
                     Summary = "Summary title 1",
-                    PublicationDate = "11:11 - 11/01/2021",
+                    PublicationDate = DateTime.Now,
                     QuantityInStock = 0,
                     Price = 0,
                     Sold = 0,
@@ -108,7 +109,7 @@ namespace BookStoreAPI.Data
                     Title = "Book title 2",
                     Image = "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg",
                     Summary = "Summary title 2",
-                    PublicationDate = "22:22 - 22/01/2021",
+                    PublicationDate = DateTime.Now,
                     QuantityInStock = 0,
                     Price = 0,
                     Sold = 0,

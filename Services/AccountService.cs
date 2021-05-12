@@ -13,36 +13,36 @@ using Microsoft.AspNetCore.Identity;
 
 namespace BookStoreAPI.Service
 {
-  public class AccountService
-  {
-    private AccountRepository repository;
+    public class AccountService
+    {
+        private AccountRepository repository;
         private readonly UserManager<Account> _userManager;
         private readonly RoleManager<AppRole> _roleManager;
 
-        public AccountService(AccountRepository AccountRepository,UserManager<Account> userManager, RoleManager<AppRole> roleManager)
-    {
-      this.repository = AccountRepository;
+        public AccountService(AccountRepository AccountRepository, UserManager<Account> userManager, RoleManager<AppRole> roleManager)
+        {
+            this.repository = AccountRepository;
             _userManager = userManager;
             _roleManager = roleManager;
         }
 
-    public List<Account> GetAll()
-    {
-      return repository.FindAll();
-    }
+        public List<Account> GetAll()
+        {
+            return repository.FindAll();
+        }
 
-    public Account GetDetail(int id)
-    {
-      return repository.FindById(id);
-    }
+        public Account GetDetail(int id)
+        {
+            return repository.FindById(id);
+        }
 
-    public Account GetDetail(string email)
-    {
-      email = FormatString.Trim_MultiSpaces_Title(email);
-      return repository.FindAll().Where(c => c.Email.Equals(email)).FirstOrDefault();
-    }
+        public Account GetDetail(string email)
+        {
+            email = FormatString.Trim_MultiSpaces_Title(email);
+            return repository.FindAll().Where(c => c.Email.Equals(email)).FirstOrDefault();
+        }
 
-    public async Task<Account> GetUserByIdAsync(int id)
+        public async Task<Account> GetUserByIdAsync(int id)
         {
             return await repository.context.Users.FindAsync(id);
         }
@@ -51,14 +51,14 @@ namespace BookStoreAPI.Service
         {
             return await repository.context.Users
                 .Include(p => p.Reviews)
-                .Include(p => p.Order_Receipts).ThenInclude(y=>y.OrderItems)
+                .Include(p => p.Order_Receipts).ThenInclude(y => y.OrderItems)
                 .SingleOrDefaultAsync(x => x.UserName == username);
         }
 
         public async Task<PagedList<Account>> GetMembersAsync(UserParams user)
         {
             var query = repository.context.Users.AsQueryable();
-            query = query.Where(u => u.UserName != user.CurrentUserName);            
+            query = query.Where(u => u.UserName != user.CurrentUserName);
             // query = user.OrderBy switch 
             // {
             //     "created" => query.OrderByDescending(u => u.Created),
@@ -66,8 +66,8 @@ namespace BookStoreAPI.Service
             // };
 
             return await PagedList<Account>.CreateAsync(query,
-                    user.pageNumber,user.pageSize);
-            
+                    user.pageNumber, user.pageSize);
+
         }
 
         public async Task<IEnumerable<Account>> GetUsersAsync()
@@ -87,5 +87,5 @@ namespace BookStoreAPI.Service
         {
             repository.context.Entry(user).State = EntityState.Modified;
         }
-  }
+    }
 }

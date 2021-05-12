@@ -94,5 +94,19 @@ namespace Controllers
             }
         }
 
+        [HttpDelete("{cartItemId}")]
+        public async Task<ActionResult<ShoppingCart>> DeleteItemsAsync(int cartItemId)
+        {
+            var userId = User.GetUserId();
+            try
+            {
+                return await service.RemoveItemsAsync(cartItemId, userId);
+            }
+            catch (Exception error)
+            {
+                return Conflict(error.Message);
+            }
+        }
+
     }
 }    

@@ -12,7 +12,7 @@ namespace BookStoreAPI.Models
         public string Title { get; set; }
         public string Image { get; set; }
         public string Summary { get; set; }
-        public string PublicationDate { get; set; }
+        public DateTime PublicationDate { get; set; }
         public int QuantityInStock { get; set; }
         public decimal Price { get; set; }
         public int Sold { get; set; }
@@ -36,7 +36,7 @@ namespace BookStoreAPI.Models
         public string Title { get; set; }
         public IFormFile Image { get; set; }
         public string Summary { get; set; }
-        public string PublicationDate { get; set; }
+        public DateTime PublicationDate { get; set; }
         public int QuantityInStock { get; set; }
         public decimal Price { get; set; }
         public int Sold { get; set; }
@@ -54,7 +54,7 @@ namespace BookStoreAPI.Models
         public string Title { get; set; }
         public IFormFile Image { get; set; }
         public string Summary { get; set; }
-        public string PublicationDate { get; set; }
+        public DateTime PublicationDate { get; set; }
         public int QuantityInStock { get; set; }
         public decimal Price { get; set; }
         public int Sold { get; set; }
