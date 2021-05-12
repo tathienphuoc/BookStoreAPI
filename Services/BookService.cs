@@ -76,7 +76,8 @@ namespace BookStoreAPI.Service
                     .Include(x => x.AuthorBooks).ThenInclude(y => y.Author)
                     .Include(x => x.BookCategories).ThenInclude(y => y.Category)
                     .Include(x => x.Order_Receipts).ThenInclude(y => y.OrderItems)
-                    .Include(x => x.Reviews).FirstOrDefault(x => x.Id == id);
+                    .Include(x => x.Reviews).ThenInclude(y=>y.Account)
+                    .FirstOrDefault(x => x.Id == id);
         }
 
         public Book GetDetail(string isbn)

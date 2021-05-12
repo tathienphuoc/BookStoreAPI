@@ -629,12 +629,12 @@ namespace BookStoreApi.Migrations
             migrationBuilder.InsertData(
                 table: "Books",
                 columns: new[] { "Id", "Discount", "ISBN", "Image", "Price", "PublicationDate", "PublisherId", "QuantityInStock", "ShoppingCartId", "Sold", "Summary", "Title" },
-                values: new object[] { 1, 0f, "Book ISBN 1", "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg", 0m, new DateTime(2021, 5, 12, 9, 32, 34, 527, DateTimeKind.Local).AddTicks(4110), 1, 0, null, 0, "Summary title 1", "Book title 1" });
+                values: new object[] { 1, 0f, "Book ISBN 1", "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg", 0m, new DateTime(2021, 5, 12, 23, 0, 8, 621, DateTimeKind.Local).AddTicks(3100), 1, 0, null, 0, "Summary title 1", "Book title 1" });
 
             migrationBuilder.InsertData(
                 table: "Books",
                 columns: new[] { "Id", "Discount", "ISBN", "Image", "Price", "PublicationDate", "PublisherId", "QuantityInStock", "ShoppingCartId", "Sold", "Summary", "Title" },
-                values: new object[] { 2, 0f, "Book ISBN 2", "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg", 0m, new DateTime(2021, 5, 12, 9, 32, 34, 542, DateTimeKind.Local).AddTicks(4830), 1, 0, null, 0, "Summary title 2", "Book title 2" });
+                values: new object[] { 2, 0f, "Book ISBN 2", "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg", 0m, new DateTime(2021, 5, 12, 23, 0, 8, 636, DateTimeKind.Local).AddTicks(2970), 1, 0, null, 0, "Summary title 2", "Book title 2" });
 
             migrationBuilder.InsertData(
                 table: "AuthorBooks",
