@@ -19,7 +19,7 @@ namespace BookStoreAPI.Data
                 UserName = "customer",
                 Image = null,
                 IsBlocked = true,
-                Email = "tungtranthanh258@gmail.com",
+                Email = "tutranthanh012@gmail.com",
                 CreditCard = null,
                 ShoppingCart = null,
                 Reviews = null,

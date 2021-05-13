@@ -7,6 +7,7 @@ namespace BookStoreAPI.Models
     {//thuoc ve 1 account va 1 book
         public string Content { get; set; }
         public DateTime CreatedAt {get;set;}
+        public string Email { get; set; }
         public bool Liked { get; set; }
         
         public int AccountId { get; set; }
@@ -17,18 +18,19 @@ namespace BookStoreAPI.Models
 
     }
     public class ReviewDto {
-        public int AccountId { get; set; }
+        public string AccountId { get; set; }
         public int BookId { get; set; }
+        public string Email { get; set; }
         public string Content { get; set; }
         public DateTime CreatedAt { get; set; }
-        public int quantity { get; set; }
-
+        public int Liked { get; set; }
     }
     public class ReviewCreateDto
     {
         public string Content { get; set; }
         public string CreatedAt {get;set;}
         public bool Liked { get; set; }
+        public string Email { get; set; }
         
         public int AccountId { get; set; }
 

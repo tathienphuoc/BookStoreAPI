@@ -29,11 +29,10 @@ namespace BookStoreAPI.Controllers
         [HttpPost("add-review")]
         public async Task<IActionResult> AddReview(ReviewDto reviewDto)
         {  
-            var accountId = reviewDto.AccountId;
+            var accountId = Int32.Parse(reviewDto.AccountId);
             
             var book = _bookService.GetDetail(reviewDto.BookId); //Get User duoc Like
             var user = await _reviewService.GetUserWithReviews(accountId);  // Get minh ra tu bang like
-
             if(book == null) return NotFound(); 
 
             var userReview = await _reviewService.GetUserReview(accountId, reviewDto.BookId);
@@ -42,6 +41,7 @@ namespace BookStoreAPI.Controllers
             userReview = new Review 
             {
                 AccountId = accountId,
+                Email = reviewDto.Email,
                 BookId = reviewDto.BookId,
                 CreatedAt = DateTime.Now,
                 Content = reviewDto.Content
