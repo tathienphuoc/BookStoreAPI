@@ -18,7 +18,7 @@ namespace BookStoreAPI.Models
 
     }
     public class ReviewDto {
-        public string AccountId { get; set; }
+        public int AccountId { get; set; }
         public int BookId { get; set; }
         public string Email { get; set; }
         public string Content { get; set; }
