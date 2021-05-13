@@ -22,7 +22,7 @@ namespace BookStoreAPI.Models
 
             if (existingItem != null)
             {
-                existingItem.Quantity++;
+                existingItem.Quantity = existingItem.Quantity + quantity;
                 existingItem.TotalPrice = existingItem.Quantity * existingItem.UnitPrice - ((decimal)existingItem.Book.Discount * (existingItem.Quantity * existingItem.UnitPrice));
             }
             else
@@ -99,6 +99,7 @@ namespace BookStoreAPI.Models
         public int AccountId { get; set; }
         public string LastUpdated { get; set; }
         public int BookId { get; set; }
+        public int Quantity { get; set; }
     }
 
     public class ShoppingCartUpdateDto

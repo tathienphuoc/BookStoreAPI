@@ -46,6 +46,7 @@ namespace BookStoreAPI.Service
             var orders = repository.context.Order_Receipts
                         .Include(x=>x.Account)
                         .Include(x=>x.OrderItems).ThenInclude(y=>y.Book)
+                        .ThenInclude(b => b.BookCategories).ThenInclude(c => c.Category)
                         .Include(x=>x.DeliveryMethod)
                         .OrderByDescending(x=>x.CreatedAt)
                         .Where(x=>x.AccountId == userId).ToList();

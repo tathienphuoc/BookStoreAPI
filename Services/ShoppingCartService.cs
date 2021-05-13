@@ -46,7 +46,7 @@ namespace BookStoreAPI.Service
         {
             var book = repository.context.Books.Find(dto.BookId);
             var cart = await GetExistingOrCreateNewCart(dto.AccountId);
-            cart.AddItem(book.Id, book, unitPrice: book.Price);
+            cart.AddItem(book.Id, book, unitPrice: book.Price, quantity: dto.Quantity);
             repository.context.ShoppingCarts.Update(cart);
             var result = await repository.context.SaveChangesAsync() > 0;
             return result;
