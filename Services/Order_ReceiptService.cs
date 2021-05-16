@@ -63,6 +63,12 @@ namespace BookStoreAPI.Service
             var delivery = await repository.context.DeliveryMethods.FirstOrDefaultAsync(x=>x.Id == dto.DeliveryId);
             var cart = await shoppingCartService.GetCartByUserName(dto.AccountId);
             var items = cart.Items;
+            foreach (var item in items)
+            {
+                var book = await repository.context.Books.FirstOrDefaultAsync(x=>x.Id == item.BookId);
+                book.QuantityInStock = book.QuantityInStock - item.Quantity;
+                await repository.context.SaveChangesAsync();
+            }
             var OrderItems = _mapper.Map<List<OrderItem>>(items);
             decimal total = 0;
             foreach (var item in items)
