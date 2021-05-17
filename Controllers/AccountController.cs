@@ -38,28 +38,51 @@ namespace BookStoreAPI.Controllers
         public async Task<ActionResult<UserDto>> Register(AccountCreateDto register)
         {
             var userFb = await _userManager.FindByEmailAsync(register.Email);
-            if (userFb != null)
+            var user = await _userManager.FindByNameAsync(register.UserName);
+            if (userFb != null && register.Image != null) // Đăng ký bằng fb
             {
-                return new UserDto()
+                var temp = new UserDto()
                 {
                     Id = userFb.Id,
                     Username = userFb.UserName,
-                    FullName = userFb.FullName,
+                    FullName = register.FullName,
                     Token = await _tokenService.CreateTokenAsync(userFb),
                     HomeAddress = userFb.HomeAddress,
                     Email = userFb.Email,
-                    Image = userFb.Image,
+                    Image = register.Image,
                     PhoneNumber = userFb.PhoneNumber
                 };
+                if (userFb.Image == null)
+                {
+                    var account = await _userManager.FindByIdAsync(userFb.Id.ToString());
+                    account.FullName = register.FullName;
+                    account.Image = register.Image;
+                    await _userManager.UpdateAsync(account);
+                }
+                return temp;
             }
-            var user = await _userManager.FindByNameAsync(register.UserName);
-            if (user != null || userFb != null) return BadRequest("Username is taken");
+            else if (userFb != null && register.Image == null) // Đăng ký bình thường
+            {
+                return BadRequest("Email is taken");
 
+            }
 
+            if (user != null || userFb != null)
+            {
+                return BadRequest("Username is taken");
+            }
 
             user = _mapper.Map<Account>(register);
+            IdentityResult result = null;
+            if (string.IsNullOrEmpty(register.Password))
+            {
+                result = await _userManager.CreateAsync(user, "123456");
+            }
+            else
+            {
+                result = await _userManager.CreateAsync(user, register.Password);
+            }
 
-            var result = await _userManager.CreateAsync(user, "123456");
             if (!result.Succeeded) return BadRequest(result.Errors);
 
             var roleResult = await _userManager.AddToRoleAsync(user, "Customer");

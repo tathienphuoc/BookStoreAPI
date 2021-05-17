@@ -10,6 +10,8 @@ namespace BookStoreAPI.Helpers
         {
             CreateMap<AccountCreateDto, Account>();
             CreateMap<Account, MemberDto>();
+            CreateMap<UserDto, Account>();
+            CreateMap<UserDto, Account>().ReverseMap();
             CreateMap<AccountUpdateDto, Account>();
             CreateMap<CartItem, OrderItem>();
             // CreateMap<Photo, PhotoDto>();
