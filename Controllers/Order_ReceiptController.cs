@@ -54,7 +54,12 @@ namespace Controllers
         {
             try
             {
-                return await service.Create(Order_ReceiptCreateDto);
+                var order = await service.Create(Order_ReceiptCreateDto);
+                if (order == null)
+                {
+                    return BadRequest("Out of quantity in stock");
+                }
+                return order;
             }
             catch (Exception error)
             {

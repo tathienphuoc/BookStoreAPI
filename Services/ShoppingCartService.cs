@@ -45,6 +45,10 @@ namespace BookStoreAPI.Service
         public async Task<bool> CreateAsync(ShoppingCartCreateDto dto)
         {
             var book = repository.context.Books.Find(dto.BookId);
+            if (book.QuantityInStock < dto.Quantity)
+            {
+                return false;
+            }
             var cart = await GetExistingOrCreateNewCart(dto.AccountId);
             cart.AddItem(book.Id, book, unitPrice: book.Price, quantity: dto.Quantity);
             repository.context.ShoppingCarts.Update(cart);
@@ -74,6 +78,11 @@ namespace BookStoreAPI.Service
                         .Include(x=>x.Items)
                         .ThenInclude(y=>y.Book)
                         .FirstOrDefault(x=>x.Id == dto.cartId);
+            var quantityInStock = cart.Items.Where(x=>x.Id == dto.cartItemId).FirstOrDefault().Book.QuantityInStock;
+            if (quantityInStock < dto.quantity)
+            {
+                return null;
+            }
             cart.UpdateItem(dto.cartItemId, dto.quantity);
             repository.context.SaveChanges();
             return cart;

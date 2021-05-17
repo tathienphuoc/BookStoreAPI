@@ -66,6 +66,10 @@ namespace BookStoreAPI.Service
             foreach (var item in items)
             {
                 var book = await repository.context.Books.FirstOrDefaultAsync(x=>x.Id == item.BookId);
+                if (book.QuantityInStock < item.Quantity)
+                {
+                    return null;
+                }
                 book.QuantityInStock = book.QuantityInStock - item.Quantity;
                 await repository.context.SaveChangesAsync();
             }

@@ -41,7 +41,8 @@ namespace BookStoreAPI.Data
             await userManager.AddToRoleAsync(user, "Customer");
             var admin = new Account
             {
-                UserName = "admin"
+                UserName = "admin",
+                Email = "test@gmail.com"
             };
 
             await userManager.CreateAsync(admin, "admin");

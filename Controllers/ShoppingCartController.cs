@@ -45,7 +45,12 @@ namespace Controllers
            
             try
             {
-                return await service.CreateAsync(ShoppingCartCreateDto);
+                var result = await service.CreateAsync(ShoppingCartCreateDto);
+                if (result == false)
+                {
+                    return BadRequest("Out of quantity in stock");
+                }
+                return result;
             }
             catch (Exception error)
             {
@@ -72,7 +77,12 @@ namespace Controllers
 
             try
             {
-                return service.ChangeQuantity(ShoppingCartUpdateDto);
+                var cart = service.ChangeQuantity(ShoppingCartUpdateDto);
+                if (cart == null)
+                {
+                    return BadRequest("Out of quantity in stock");
+                }
+                return cart;
             }
             catch (Exception error)
             {

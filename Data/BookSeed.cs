@@ -29,7 +29,7 @@ namespace BookStoreAPI.Data
                 book.Price = book.Price;
                 book.Summary = book.Summary;
                 book.PublicationDate = DateTime.Now;
-                book.QuantityInStock = 0;
+                book.QuantityInStock = 100;
                 book.Sold = 0;
                 book.Discount = 0;
                 int temp = rnd.Next(1,9);

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookStoreApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210513032556_InitDB")]
+    [Migration("20210517040355_InitDB")]
     partial class InitDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -258,7 +258,7 @@ namespace BookStoreApi.Migrations
                             ISBN = "Book ISBN 1",
                             Image = "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg",
                             Price = 0m,
-                            PublicationDate = new DateTime(2021, 5, 13, 10, 25, 55, 833, DateTimeKind.Local).AddTicks(310),
+                            PublicationDate = new DateTime(2021, 5, 17, 11, 3, 54, 668, DateTimeKind.Local).AddTicks(6390),
                             PublisherId = 1,
                             QuantityInStock = 0,
                             Sold = 0,
@@ -272,7 +272,7 @@ namespace BookStoreApi.Migrations
                             ISBN = "Book ISBN 2",
                             Image = "https://www.ormondbeachmartialarts.com/wp-content/uploads/2017/04/default-image.jpg",
                             Price = 0m,
-                            PublicationDate = new DateTime(2021, 5, 13, 10, 25, 55, 847, DateTimeKind.Local).AddTicks(5860),
+                            PublicationDate = new DateTime(2021, 5, 17, 11, 3, 54, 684, DateTimeKind.Local).AddTicks(6180),
                             PublisherId = 1,
                             QuantityInStock = 0,
                             Sold = 0,
