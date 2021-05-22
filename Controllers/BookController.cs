@@ -59,6 +59,7 @@ namespace Controllers
             return Book;
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Book>> CreateAsync([FromForm]BookCreateDto BookCreateDto)
         {
             try
@@ -97,6 +98,7 @@ namespace Controllers
             }
         }
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public ActionResult<Book> DeleteBook(int id){
             try{
                 return service.Delete(id);

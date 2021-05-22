@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BookStoreAPI.Models;
 using BookStoreAPI.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 namespace Controllers
@@ -38,6 +39,7 @@ namespace Controllers
             return Category;
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public ActionResult<Category> Create(CategoryCreateDto CategoryCreateDto)
         {
             try
@@ -51,6 +53,7 @@ namespace Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public ActionResult<Category> Update(CategoryUpdateDto CategoryUpdateDto){
             try{
                 return service.Update(CategoryUpdateDto);
@@ -59,6 +62,7 @@ namespace Controllers
             }
         }
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public ActionResult<Category> DeleteCategory(int id){
             try{
                 return service.Delete(id);

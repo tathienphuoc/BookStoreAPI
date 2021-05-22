@@ -6,6 +6,8 @@ using BookStoreAPI.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using Microsoft.AspNetCore.Authorization;
+
 namespace Controllers
 {
     [Route("api/[controller]")]
@@ -39,6 +41,7 @@ namespace Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public ActionResult<Publisher> Create(PublisherCreateDto PublisherCreateDto)
         {
             try
@@ -53,6 +56,7 @@ namespace Controllers
 
 
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public ActionResult<Publisher> Update(PublisherUpdateDto PublisherUpdateDto)
         {
             try
@@ -71,6 +75,7 @@ namespace Controllers
 
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public ActionResult<Publisher> DeletePublisher(int id)
         {
             try

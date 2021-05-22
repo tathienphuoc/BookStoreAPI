@@ -47,6 +47,7 @@ namespace Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public ActionResult<Author> Create(AuthorCreateDto AuthorCreateDto)
         {
             try
@@ -60,6 +61,7 @@ namespace Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public ActionResult<Author> Update(AuthorUpdateDto AuthorUpdateDto)
         {
             try
@@ -79,6 +81,7 @@ namespace Controllers
 
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public ActionResult<Author> DeleteAuthor(int id)
         {
             try

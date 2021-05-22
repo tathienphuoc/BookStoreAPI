@@ -109,7 +109,7 @@ namespace BookStoreAPI.Controllers
             if (user == null) return Unauthorized("Invalid Username");
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, login.Password, false);
-            if (!result.Succeeded) return Unauthorized();
+            if (!result.Succeeded) return Unauthorized("Incorrect Password");
             return new UserDto()
             {
                 Id = user.Id,

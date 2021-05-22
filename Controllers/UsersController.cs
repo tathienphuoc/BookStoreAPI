@@ -61,6 +61,7 @@ namespace BookStoreAPI.Controllers
         }
 
         [HttpPut("block/{userId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> BlockUser(int userId)
         {
             var user = await _accountService.GetUserByIdAsync(User.GetUserId());
@@ -72,6 +73,7 @@ namespace BookStoreAPI.Controllers
         }
 
         [HttpPut("unblock/{userId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> UnblockBlockUser(int userId)
         {
             var user = await _accountService.GetUserByIdAsync(User.GetUserId());
